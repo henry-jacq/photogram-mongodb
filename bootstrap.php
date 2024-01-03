@@ -2,9 +2,9 @@
 
 use Dotenv\Dotenv;
 
-include 'vendor/autoload.php';
-include 'config/constants.php';
-include 'config/helper.php';
+require 'vendor/autoload.php';
+require 'config/constants.php';
+require 'config/helper.php';
 
 ini_set('display_errors', true);
 

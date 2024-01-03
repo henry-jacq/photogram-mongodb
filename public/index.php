@@ -2,6 +2,16 @@
 
 include __DIR__ . '/../bootstrap.php';
 
-include __DIR__ . '/../app/core/View.php';
+use App\Core\View;
+use App\Core\Config;
 
-echo ("From Photogram!");
+$config = require __DIR__ . '/../config/app.php';
+
+$c = new Config($config);
+$v = new View($c);
+
+$args = [
+    'title' => 'Login page'
+];
+
+$v->createPage('home/home', $args)->render();
