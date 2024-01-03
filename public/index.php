@@ -11,7 +11,7 @@ $c = new Config($config);
 $v = new View($c);
 
 $args = [
-    'title' => 'Login page'
+    'title' => 'Home page'
 ];
 
 $v->createPage('home/home', $args)->render();
