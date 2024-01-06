@@ -22,7 +22,8 @@ Before starting the project, you will need to have the following packages instal
 - NPM
 - Curl
 - Composer
-- Apache web server
+- Apache (Web Server)
+- Grunt (Task Runner)
 
 ### Installation
 
