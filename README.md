@@ -39,6 +39,11 @@ Install NPM dependencies:
 npm install
 ```
 
+Install Grunt and Sass:
+```bash
+npm install -g grunt-cli sass
+```
+
 Install php-gd extension:
 - This extension is used for image processing
 
