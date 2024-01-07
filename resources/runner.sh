@@ -2,7 +2,7 @@
 
 # This script will run the set of commands used for grunt
 # Created on: 2023-04-19
-# Updated on: 2024-01-06
+# Updated on: 2024-01-07
 
 # It will concat and minify the CSS files
 function run_css()
@@ -48,12 +48,12 @@ function check_args()
     if [[ $1 != '-t' ]]
     then
         echo -e "[!] Usage: $0 -t <task>"
-        echo -e "[!] Available tasks: [css, scss, js, copy]\n"
+        echo -e "[!] Available tasks: [css, scss, js, copy, watch]\n"
         exit -1
     elif [[ $2 == '' ]]
     then
         echo -e "[!] Usage: $0 -t <task>"
-        echo -e "[!] Available tasks: [css, scss, js, copy]\n"
+        echo -e "[!] Available tasks: [css, scss, js, copy, watch]\n"
         exit -1
     fi
 }
@@ -69,7 +69,7 @@ function main()
             t) task=${OPTARG};;
         esac
 
-        if [[ $task == 'js' || $task == 'css' || $task == 'scss' || $task == 'copy' ]]
+        if [[ $task == 'js' || $task == 'css' || $task == 'scss' || $task == 'copy' || $task == 'watch' ]]
         then
             echo -e "-> Running grunt tasks for $task\n"
             if [[ $task == 'js' ]]; then
@@ -92,6 +92,8 @@ function main()
                 if [[ $? == 0 ]]; then
                     echo -e "[+] Tasks for $task done successfully\n"
                 fi
+            elif [[ $task == 'watch' ]]; then
+                grunt watch
             fi
         else
             echo -e "[-] Provide valid task name!\n"
