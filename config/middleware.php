@@ -2,20 +2,14 @@
 
 use Slim\App;
 use App\Core\Config;
-// use App\Middleware\AuthenticateMiddleware;
-// use App\Middleware\SessionStartMiddleware;
-// use App\Middleware\ValidationErrorMiddleware;
+use App\Middleware\SessionStartMiddleware;
 
 return function (App $app) {
 
     $container = $app->getContainer();
     $config = $container->get(Config::class);
     
-    // $app->add(AuthenticateMiddleware::class);
-    // // $app->add(ValidationExceptionMiddleware::class);
-    // $app->add(ValidationErrorMiddleware::class);
-    // // $app->add(OldFormDataMiddleware::class);
-    // $app->add(SessionStartMiddleware::class);
+    $app->add(SessionStartMiddleware::class);
     $app->addRoutingMiddleware();
     $app->addBodyParsingMiddleware();
     $app->addErrorMiddleware(
