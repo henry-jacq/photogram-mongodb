@@ -141,7 +141,7 @@ module.exports = function (grunt) {
         watch: {
             css: {
                 files: ["src/css/**/*.css"],
-                tasks: ["concat:css", "cssmin"],
+                tasks: ["concat:css", "cssmin:css"],
                 options: {
                     spawn: false,
                 },
@@ -162,7 +162,7 @@ module.exports = function (grunt) {
             },
             scss: {
                 files: ["src/scss/**/*.scss"],
-                tasks: ["concat:scss", "sass", "cssmin"],
+                tasks: ["concat:scss", "sass", "cssmin:scss"],
                 options: {
                     spawn: false,
                 },
