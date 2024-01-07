@@ -43,13 +43,19 @@ Install php-gd extension:
 - This extension is used for image processing
 
 ```bash
-sudo apt-get install php-gd
+sudo apt-get install php-gd php-mongodb
 ```
 
 Uncomment the gd extension in php.ini config:
 ```php
 ;extension=gd
 extension=gd
+```
+
+Uncomment the mongodb extension in php.ini config:
+```php
+;extension=mongodb
+extension=mongodb
 ```
 
 Enabling apache modules:
