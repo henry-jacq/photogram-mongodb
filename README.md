@@ -56,6 +56,7 @@ Enabling apache modules:
 ```bash
 sudo a2enmod headers
 sudo a2enmod rewrite
+sudo a2enmod actions
 ```
 
 Restart apache to apply changes
