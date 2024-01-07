@@ -2,7 +2,7 @@
     <meta data-n-head="1" charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?= $this->title ?></title>
+    <title><?= $this->title ?> · Photogram</title>
     <link rel="icon" type="image/x-icon" href="/assets/brand/photogram-icon.png">
     <meta name="author" content="Henry">
     <meta property="og:image" content="/assets/brand/photogram-icon.png">
@@ -11,7 +11,7 @@
     <meta property="og:site_name" content="DOMAIN_NAME">
     <meta property="og:type" content="website">
     <meta property="og:image" content="/assets/brand/photogram-icon.png">
-    <meta property="og:image:alt" content="Photogram • Created by Henry">
+    <meta property="og:image:alt" content="Photogram · Created by Henry">
     <meta property="description" content="Create an account or log in to Photogram. Share photos &amp; videos with friends, family and other people you know.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Photogram">

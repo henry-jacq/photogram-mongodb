@@ -1,6 +1,8 @@
-<footer class="py-5 text-center text-body-secondary bg-body-tertiary">
-    <p>Storylog built by <a href="https://github.com/henry-jacq">@henry</a>.</p>
-    <p class="mb-0">
-        <a href="#">Back to top</a>
-    </p>
-</footer>
+<div class="container mb-3 mt-auto">
+    <footer class="py-4 bg-body-tertiary rounded">
+        <div class="text-center text-body-secondary">
+            <p>©Copyrights <?= date('Y') . '-' . date('Y') + 1 ?>. All rights reserved.</p>
+            <span>Made with ❤ by <a href="https://github.com/henry-jacq">Henry</a>.</span>
+        </div>
+    </footer>
+</div>
