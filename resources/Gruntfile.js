@@ -1,6 +1,4 @@
 module.exports = function (grunt) {
-    // Do grunt-related things in here
-
     var currentdate = new Date();
     var datetime =
         currentdate.getDate() +
@@ -20,8 +18,7 @@ module.exports = function (grunt) {
         concat: {
             options: {
                 separator: "\n",
-                sourceMap: true,
-                banner: "/* Processed by Grunt on " + datetime + " */\n\n\n",
+                banner: "/* Processed by Grunt on " + datetime + " */\n",
             },
             css: {
                 src: ["src/css/**/*.css"],
@@ -37,11 +34,13 @@ module.exports = function (grunt) {
             },
             scss: {
                 src: ["src/scss/**/*.scss"],
-                dest: "dist/style.scss",
+                dest: "dist/bootstrap.scss",
             },
         },
         cssmin: {
             options: {
+                separator: "\n",
+                banner: "/* Processed by Grunt on " + datetime + " */\n",
                 mergeIntoShorthands: false,
                 roundingPrecision: -1,
                 sourceMap: true,
@@ -61,14 +60,13 @@ module.exports = function (grunt) {
             compile_scss: {
                 options: {
                     style: "expanded",
-                    loadPath: ["../node_modules/bootstrap/scss"]
+                    loadPath: ["../node_modules/bootstrap/scss"],
                 },
                 files: {
                     "dist/bootstrap.css": ["dist/bootstrap.scss"],
                 },
             },
         },
-
         uglify: {
             minify: {
                 options: {
@@ -101,26 +99,26 @@ module.exports = function (grunt) {
                 src: "../node_modules/@popperjs/core/dist/umd/popper.min.js.map",
                 dest: "../public/js/vendor/popper.min.js.map",
             },
-            // bootstrap_js_min: {
-            //     expand: false,
-            //     src: "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-            //     dest: "../public/js/vendor/bootstrap.min.js",
-            // },
-            // bootstrap_js_min_map: {
-            //     expand: false,
-            //     src: "../node_modules/bootstrap/dist/js/bootstrap.min.js.map",
-            //     dest: "../public/js/vendor/bootstrap.min.js.map",
-            // },
-            bootstrap_css_min: {
+            bootstrap_js_min: {
                 expand: false,
-                src: "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-                dest: "../public/css/bootstrap.min.css",
+                src: "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+                dest: "../public/js/vendor/bootstrap.min.js",
             },
-            bootstrap_css_min_map: {
+            bootstrap_js_min_map: {
                 expand: false,
-                src: "../node_modules/bootstrap/dist/css/bootstrap.min.css.map",
-                dest: "../public/css/bootstrap.min.css.map",
+                src: "../node_modules/bootstrap/dist/js/bootstrap.min.js.map",
+                dest: "../public/js/vendor/bootstrap.min.js.map",
             },
+            // bootstrap_css_min: {
+            //     expand: false,
+            //     src: "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+            //     dest: "../public/css/bootstrap.min.css",
+            // },
+            // bootstrap_css_min_map: {
+            //     expand: false,
+            //     src: "../node_modules/bootstrap/dist/css/bootstrap.min.css.map",
+            //     dest: "../public/css/bootstrap.min.css.map",
+            // },
         },
 
         obfuscator: {
@@ -179,7 +177,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-obfuscator");
     grunt.loadNpmTasks("grunt-contrib-watch");
-    /** Default Grunt Tasks
+    /** 
+     * Default Grunt Tasks
      * Copy files to public folder
      * Concatenate files into one file
      * Minify CSS
