@@ -3,8 +3,11 @@
 use Slim\App;
 use App\Core\View;
 use App\Core\Config;
+use App\Core\Request;
+use App\Core\Session;
 use function DI\create;
 use Slim\Factory\AppFactory;
+use App\Interfaces\SessionInterface;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -27,5 +30,11 @@ return [
     ),
     View::class => function(ContainerInterface $container){
         return new View($container->get(Config::class));
+    },
+    SessionInterface::class => function (ContainerInterface $container) {
+        return new Session($container->get(Config::class));
+    },
+    Request::class => function(ContainerInterface $container) {
+        return new Request($container->get(SessionInterface::class));
     },
 ];

@@ -2,9 +2,10 @@
 
 namespace App\Core;
 
-use \Exception;
+use Exception;
+use App\Interfaces\ViewInterface;
 
-class View
+class View implements ViewInterface
 {
     public string $title;
     private mixed $resultView;
