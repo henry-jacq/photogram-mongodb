@@ -1,43 +1,60 @@
-// Get current theme
-let currentTheme = document.querySelector("html").getAttribute("data-bs-theme");
-// Theme value stored in local storage
-let storedTheme = localStorage.getItem("theme-value");
+(() => {
+    'use strict'
 
-// Set theme from local storage
-if (storedTheme == null) {
-    // Set dark in theme-value as default
-    localStorage.setItem("theme-value", currentTheme);
-} else {
-    if (storedTheme == "auto" || storedTheme == "light") {
-        document.querySelector("html").setAttribute("data-bs-theme", "light");
-        document.querySelector("#themeSwitcher > i").classList.remove("bi-moon-stars");
-        document.querySelector("#themeSwitcher > i").classList.add("bi-brightness-high");
-    } else if (storedTheme == "dark") {
-        document.querySelector("html").setAttribute("data-bs-theme", "dark");
-        document.querySelector("#themeSwitcher > i").classList.remove("bi-brightness-high");
-        document.querySelector("#themeSwitcher > i").classList.add("bi-moon-stars");
+    const getStoredTheme = () => localStorage.getItem('theme')
+    const setStoredTheme = theme => localStorage.setItem('theme', theme)
+
+    const getPreferredTheme = () => {
+        const storedTheme = getStoredTheme()
+        if (storedTheme) {
+            return storedTheme
+        }
+
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     }
-}
 
-// Change theme on click
-document.querySelector("#themeSwitcher").addEventListener("click", function () {
-    let themeAttr = "data-bs-theme";
-    let currentTheme = document.querySelector("html").getAttribute(themeAttr);
-
-    if (currentTheme == "light") {
-        document.querySelector("#themeSwitcher").setAttribute("data-bs-title", "Change to dark theme");
-        document.querySelector("#themeSwitcher > i").classList.remove("bi-brightness-high");
-        document.querySelector("#themeSwitcher > i").classList.add("bi-moon-stars");
-        document.querySelector("html").setAttribute(themeAttr, "dark");
-        localStorage.setItem("theme-value", "dark");
-    } else if (currentTheme == "dark") {
-        document.querySelector("#themeSwitcher").setAttribute("data-bs-title", "Change to light theme");
-        document.querySelector("#themeSwitcher > i").classList.remove("bi-moon-stars");
-        document.querySelector("#themeSwitcher > i").classList.add("bi-brightness-high");
-        document.querySelector("html").setAttribute(themeAttr, "light");
-        localStorage.setItem("theme-value", "light");
+    const setTheme = theme => {
+        if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-bs-theme', 'dark')
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', theme)
+        }
     }
-});
+
+    setTheme(getPreferredTheme())
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        const storedTheme = getStoredTheme()
+        if (storedTheme !== 'light' && storedTheme !== 'dark') {
+            setTheme(getPreferredTheme())
+        }
+    })
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const toggleButtons = document.querySelectorAll('[data-bs-theme-value]');
+
+        toggleButtons.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const theme = toggle.getAttribute('data-bs-theme-value');
+                setStoredTheme(theme);
+                setTheme(theme);
+
+                // Add btn-prime class to the clicked button and remove from others
+                toggleButtons.forEach(btn => {
+                    if (btn === toggle) {
+                        btn.classList.add('btn-prime');
+                    } else {
+                        btn.classList.remove('btn-prime');
+                    }
+                });
+            });
+            var theme = toggle.getAttribute('data-bs-theme-value');
+            if (theme == getPreferredTheme()) {
+                toggle.classList.add('btn-prime')
+            }
+        });
+    });
+})()
 
 // To trigger the tooltip
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
