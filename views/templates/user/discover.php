@@ -5,7 +5,7 @@
                 <div class="d-none d-md-inline-block">
                     <i class="bi bi-search small text-body border-0 ps-3 position-absolute top-50 start-0 translate-middle-y"></i>
                 </div>
-                <input class="form-control shadow px-md-5" type="search" placeholder="Search by peoples, posts and tags..." aria-label="Search" aria-describedby="search-blogs">
+                <input class="form-control shadow px-md-5" type="search" placeholder="Discover peoples ..." aria-label="Search" aria-describedby="search-blogs">
                 <div class="d-none d-md-inline-block">
                     <button class="btn btn-comment-send focus-ring focus-ring-prime border-0 position-absolute top-50 end-0 translate-middle-y" type="button"><i class="bi bi-toggles2"></i></button>
                 </div>
