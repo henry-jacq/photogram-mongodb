@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller\User;
 
 use App\Core\View;
 use App\Core\Config;
