@@ -2,9 +2,10 @@
 
 namespace App\Interfaces;
 
+use \PDO;
+
 interface DatabaseConnectorInterface
 {
-    public function getConnection();
-    public function query($query, $params = []);
+    public static function getConnection(PDO $conn);
     public function execute($query, $params = []);
 }
