@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function login(Request $request, Response $response): Response
     {
         $args = [
-            'title' => 'Login page'
+            'title' => 'Login'
         ];
         return $this->render($response, 'auth/login', $args, false);
     }
@@ -31,7 +31,7 @@ class AuthController extends Controller
     public function register(Request $request, Response $response): Response
     {
         $args = [
-            'title' => 'Register page'
+            'title' => 'Register'
         ];
         return $this->render($response, 'auth/register', $args, false);
     }

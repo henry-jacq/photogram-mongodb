@@ -14,7 +14,7 @@ class SessionStartMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly SessionInterface $session,
-        private readonly Request $request
+        private readonly Request $requestService
     ) {
     }
 
@@ -24,7 +24,7 @@ class SessionStartMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
-        if ($request->getMethod() === 'GET' && !$this->request->isXhr($request)) {
+        if ($request->getMethod() === 'GET' && !$this->requestService->isXhr($request)) {
             $this->session->put('previousUrl', (string) $request->getUri());
         }
 
