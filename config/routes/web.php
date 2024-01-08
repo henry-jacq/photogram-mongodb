@@ -9,7 +9,8 @@ use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
     $app->group('/', function (RouteCollectorProxy $group) {
-        $group->get('', [HomeController::class, 'index']);
+        $group->get('', [HomeController::class, 'indexView']);
+        $group->get('discover', [HomeController::class, 'discoverView']);
     });
     $app->group('/', function (RouteCollectorProxy $group) {
         $group->get('login', [AuthController::class, 'login']);
