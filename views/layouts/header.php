@@ -24,15 +24,15 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a role="button" class="nav-link active" aria-current="page">
+                            <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');">
                                 <i class="bi bi-plus-square fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Create Post"></i><span class="d-md-none ms-2">Create</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/activities"><i class="bi bi-heart fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="My Activities"></i><span class="d-md-none ms-2">Likes</span></a>
+                            <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');"><i class="bi bi-heart fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="My Activities"></i><span class="d-md-none ms-2">Likes</span></a>
                         </li>
                         <li class="nav-item">
-                            <a role="button" class="nav-link active" aria-current="page">
+                            <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');">
                                 <div class="d-flex">
                                     <div class="position-relative">
                                         <i class="bi bi-bell fs-5"></i>
@@ -44,7 +44,7 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link active" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                                <img class="img-fluid border rounded-circle" src="https://api.dicebear.com/6.x/shapes/svg?seed=1" width="26" height="26">
+                                <img class="img-fluid border border-prime border-2 rounded-circle" src="https://api.dicebear.com/6.x/shapes/svg?seed=1" width="28" height="28">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708" />
                                 </svg>
