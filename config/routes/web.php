@@ -6,13 +6,14 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Controller\Api\PostController;
 use App\Controller\User\AuthController;
 use App\Controller\User\HomeController;
-
+use App\Controller\User\ProfileController;
 
 return function (App $app) {
     // User Routes
     $app->group('/', function (RouteCollectorProxy $group) {
         $group->get('', [HomeController::class, 'indexView']);
         $group->get('discover', [HomeController::class, 'discoverView']);
+        $group->get('profile/{name}', [ProfileController::class, 'profileView']);
     });
 
     // Auth Routes
