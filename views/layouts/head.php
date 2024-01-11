@@ -21,5 +21,4 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="/css/app.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://social.webestica.com/assets/vendor/zuck.js/dist/zuck.min.css">
 </head>
