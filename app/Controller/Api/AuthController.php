@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\User;
+namespace App\Controller\Api;
 
 use App\Core\Auth;
 use App\Core\View;
@@ -20,7 +20,7 @@ class AuthController extends Controller
         parent::__construct($view, $config);
     }
     
-    public function login(Request $request, Response $response): Response
+    public function loginView(Request $request, Response $response): Response
     {
         $args = [
             'title' => 'Login'
@@ -28,7 +28,7 @@ class AuthController extends Controller
         return $this->render($response, 'auth/login', $args, false);
     }
 
-    public function register(Request $request, Response $response): Response
+    public function registerView(Request $request, Response $response): Response
     {
         $args = [
             'title' => 'Register'
