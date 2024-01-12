@@ -19,8 +19,8 @@ return [
     App::class => function (ContainerInterface $container) {
         AppFactory::setContainer($container);
 
-        $middleware = require CONFIG_PATH . '/middleware.php';
-        $router     = require CONFIG_PATH . '/routes/web.php';
+        $middleware = require CONFIG_PATH . DIRECTORY_SEPARATOR . '/middleware.php';
+        $router     = require ROUTES_PATH . DIRECTORY_SEPARATOR . 'web.php';
 
         $app = AppFactory::create();
 
