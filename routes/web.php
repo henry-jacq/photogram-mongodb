@@ -3,10 +3,10 @@
 use Slim\App;
 use App\Middleware\AuthMiddleware;
 use Slim\Routing\RouteCollectorProxy;
-use App\Controller\Api\PostController;
-use App\Controller\Api\AuthController;
-use App\Controller\User\HomeController;
-use App\Controller\User\ProfileController;
+use App\Controller\PostController;
+use App\Controller\AuthController;
+use App\Controller\HomeController;
+use App\Controller\ProfileController;
 
 return function (App $app) {
     // User Routes
@@ -19,9 +19,7 @@ return function (App $app) {
     // Auth Routes
     $app->group('/', function (RouteCollectorProxy $group) {
         $group->get('login', [AuthController::class, 'loginView']);
-        $group->post('login', [AuthController::class, 'verifyLogin']);
         $group->get('register', [AuthController::class, 'registerView']);
-        $group->post('register', [AuthController::class, 'createUser']);
         $group->get('forgot-password', [AuthController::class, 'forgotPassword']);
     })->add(AuthMiddleware::class);
 

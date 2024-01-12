@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller;
 
 use App\Core\Auth;
 use App\Core\View;
@@ -13,8 +13,8 @@ class AuthController extends Controller
 {
     public function __construct(
         private readonly View $view,
-        private readonly Config $config,
-        private readonly Auth $auth
+        private readonly Auth $auth,
+        private readonly Config $config
     )
     {
         parent::__construct($view, $config);
@@ -36,18 +36,20 @@ class AuthController extends Controller
         return $this->render($response, 'auth/register', $args, false);
     }
 
-    public function createUser(Request $request, Response $response, array $args): Response
+    public function login(Request $request, Response $response): Response
     {
-        $result = $this->auth->register($request->getParsedBody());
-        return $this->respondAsJson($response, ['message' => boolval($result)]);
-    }
-    
-    public function verifyLogin(Request $request, Response $response): Response
-    {
+        if ($request->getMethod() == 'GET') {
+            return $response->withHeader('Location', '/')->withStatus(302);
+        }
         $result = $this->auth->login($request->getParsedBody());
         $data = ['message' => (boolval($result)) ? true : false];
         return $this->respondAsJson($response, $data);
-        // return $response->withHeader('Location', '/')->withStatus(302);
+    }
+    
+    public function register(Request $request, Response $response, array $args): Response
+    {
+        $result = $this->auth->register($request->getParsedBody());
+        return $this->respondAsJson($response, ['message' => boolval($result)]);
     }
 
     public function forgotPassword(Request $request, Response $response): Response
