@@ -4,16 +4,15 @@ use Slim\App;
 use App\Core\View;
 use MongoDB\Client;
 use App\Core\Config;
+use App\Core\MongoDB;
 use App\Core\Request;
 use App\Core\Session;
 use function DI\create;
-use App\Database\Database;
 use Slim\Factory\AppFactory;
 use App\Interfaces\SessionInterface;
 use Psr\Container\ContainerInterface;
-use App\Database\Connectors\MySQLConnector;
-use App\Database\Connectors\MongoDBConnector;
 use App\Interfaces\DatabaseConnectorInterface;
+use App\Model\User;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
@@ -44,18 +43,12 @@ return [
     Request::class => function(ContainerInterface $container) {
         return new Request($container->get(SessionInterface::class));
     },
-    DatabaseConnectorInterface::class =>
-    function (ContainerInterface $container) {
+    MongoDB::class => function(ContainerInterface $container) {
         $config = $container->get(Config::class)->get('db');
-        $pdo = new \PDO(
-            "{$config['driver']}:host={$config['host']};port={$config['port']};dbname={$config['dbname']}",
-            $config['user'],
-            $config['pass'],
-            [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
-        );
-        return new MySQLConnector($container->get(Config::class));
+        $client = new Client($config['host']);
+        return MongoDB::getInstance($client, $config['dbname']);
     },
-    Database::class => function(ContainerInterface $container) {
-        return Database::getInstance($container->get(DatabaseConnectorInterface::class));
-    },
+    User::class => function(ContainerInterface $container) {
+        return new User($container->get(MongoDB::class));
+    }
 ];
