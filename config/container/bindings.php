@@ -1,5 +1,6 @@
 <?php
 
+use App\Core\Auth;
 use Slim\App;
 use App\Core\View;
 use MongoDB\Client;
@@ -50,5 +51,11 @@ return [
     },
     User::class => function(ContainerInterface $container) {
         return new User($container->get(MongoDB::class));
+    },
+    Auth::class => function (ContainerInterface $container) {
+        return new Auth(
+            $container->get(User::class),
+            $container->get(Session::class)
+        );
     }
 ];

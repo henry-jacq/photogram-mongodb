@@ -1,12 +1,13 @@
 <?php
 
 use Slim\App;
-use App\Middleware\AuthMiddleware;
 use Slim\Routing\RouteCollectorProxy;
-use App\Controller\PostController;
+use App\Controller\ApiController;
+use App\Middleware\AuthMiddleware;
 use App\Controller\AuthController;
 use App\Controller\HomeController;
 use App\Controller\ProfileController;
+use App\Middleware\AuthoriseMiddleware;
 
 return function (App $app) {
     // User Routes
@@ -14,7 +15,7 @@ return function (App $app) {
         $group->get('', [HomeController::class, 'indexView']);
         $group->get('discover', [HomeController::class, 'discoverView']);
         $group->get('profile/{name}', [ProfileController::class, 'profileView']);
-    });
+    })->add(AuthoriseMiddleware::class);
 
     // Auth Routes
     $app->group('/', function (RouteCollectorProxy $group) {
@@ -23,11 +24,10 @@ return function (App $app) {
         $group->get('forgot-password', [AuthController::class, 'forgotPassword']);
     })->add(AuthMiddleware::class);
 
+    $app->get('/logout', [AuthController::class, 'logout']);
+    
     // API Routes
     $app->group('/api', function (RouteCollectorProxy $group) {
-        $group->post('/post/create', [PostController::class, 'createPost']);
-        $group->post('/post/delete', [PostController::class, 'deletePost']);
-        $group->post('/post/update', [PostController::class, 'updatePost']);
-        $group->post('/post/count', [PostController::class, 'getCount']);
+        $group->any('/{namespace}/{resource}', [ApiController::class, 'process']);
     });
 };
