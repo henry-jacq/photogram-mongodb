@@ -22,15 +22,4 @@ class Controller
         );
         return $response;
     }
-
-    /**
-     * Write response as JSON
-     */
-    public function respondAsJson(Response $response, array $payload, int $statusCode = 200)
-    {
-        $response->getBody()->write(packJson($payload));   
-        return $response
-            ->withHeader('Content-Type', 'application/json')
-            ->withStatus($statusCode);
-    }
 }

@@ -36,22 +36,6 @@ class AuthController extends Controller
         return $this->render($response, 'auth/register', $args, false);
     }
 
-    public function login(Request $request, Response $response): Response
-    {
-        if ($request->getMethod() == 'GET') {
-            return $response->withHeader('Location', '/')->withStatus(302);
-        }
-        $result = $this->auth->login($request->getParsedBody());
-        $data = ['message' => (boolval($result)) ? true : false];
-        return $this->respondAsJson($response, $data);
-    }
-    
-    public function register(Request $request, Response $response, array $args): Response
-    {
-        $result = $this->auth->register($request->getParsedBody());
-        return $this->respondAsJson($response, ['message' => boolval($result)]);
-    }
-
     public function forgotPassword(Request $request, Response $response): Response
     {
         $args = [
