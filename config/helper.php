@@ -26,7 +26,10 @@ function now()
  */
 function packJson(array $data)
 {
-    return json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+    if (is_array($data)) {
+        return json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+    }
+    return '{}';
 }
 
 /**
