@@ -1,7 +1,7 @@
-<div class="container mt-3">
+<div class="container mt-3 px-md-5">
     <nav class="navbar navbar-expand-md bg-body-tertiary border rounded" aria-label="Photogram Navbar">
         <div class="container-fluid gap-2">
-            <a class="navbar-brand fw-light fs-4 me-auto link-body-emphasis" href="/">
+            <a class="navbar-brand fw-light fs-4 me-auto link-body-emphasis" href="/home">
                 <img src="/assets/brand/photogram-logo.png" width="30" class="d-inline-block align-text-top">
                 <div class="d-none d-md-inline-block">
                     <span>Photogram</span>
@@ -14,7 +14,7 @@
                 <div class="d-md-flex justify-content-md-end ms-auto">
                     <ul class="navbar-nav gap-md-3">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">
+                            <a class="nav-link active" aria-current="page" href="/home">
                                 <i class="bi bi-house-door<?php if ($title == 'Home'): echo('-fill'); endif; ?> fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Home"></i><span class="d-md-none ms-2">Home</span>
                             </a>
                         </li>
@@ -25,11 +25,11 @@
                         </li>
                         <li class="nav-item">
                             <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');">
-                                <i class="bi bi-plus-square fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Create Post"></i><span class="d-md-none ms-2">Create</span>
+                                <i class="bi bi-plus-square fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Create Post"></i><span class="d-md-none ms-2">Create Post</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');"><i class="bi bi-heart fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="My Activities"></i><span class="d-md-none ms-2">Likes</span></a>
+                            <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');"><i class="bi bi-heart fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="My Activities"></i><span class="d-md-none ms-2">My Activities</span></a>
                         </li>
                         <li class="nav-item">
                             <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');">
