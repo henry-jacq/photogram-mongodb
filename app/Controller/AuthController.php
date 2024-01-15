@@ -13,11 +13,10 @@ class AuthController extends Controller
 {
     public function __construct(
         private readonly View $view,
-        private readonly Auth $auth,
-        private readonly Config $config
+        private readonly Auth $auth
     )
     {
-        parent::__construct($view, $config);
+        parent::__construct($view);
     }
 
     public function landingView(Request $request, Response $response): Response
