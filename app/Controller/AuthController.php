@@ -19,6 +19,14 @@ class AuthController extends Controller
     {
         parent::__construct($view, $config);
     }
+
+    public function landingView(Request $request, Response $response): Response
+    {
+        $args = [
+            'title' => 'Share Memories'
+        ];
+        return $this->render($response, 'auth/landing', $args, false);
+    }
     
     public function loginView(Request $request, Response $response): Response
     {
@@ -42,7 +50,7 @@ class AuthController extends Controller
             'title' => 'Forgot password',
             'name' => 'Henry'
         ];
-        return $this->render($response, 'auth/forgot-password', $args, false);
+        return $this->render($response, 'auth/reset_password', $args, false);
     }
 
     public function logout(Request $request, Response $response): Response

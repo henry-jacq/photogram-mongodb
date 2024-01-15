@@ -17,7 +17,7 @@ class ProfileController extends Controller
         parent::__construct($view, $config);
     }
 
-    public function profileView(Request $request, Response $response): Response
+    public function profile(Request $request, Response $response): Response
     {
         $name = $request->getAttribute('name');
         $args = [

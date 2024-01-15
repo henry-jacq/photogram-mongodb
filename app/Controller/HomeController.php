@@ -17,7 +17,7 @@ class HomeController extends Controller
         parent::__construct($view, $config);
     }
     
-    public function indexView(Request $request, Response $response): Response
+    public function home(Request $request, Response $response): Response
     {
         $args = [
             'title' => 'Home'
@@ -25,7 +25,7 @@ class HomeController extends Controller
         return $this->render($response, 'user/home', $args);
     }
 
-    public function discoverView(Request $request, Response $response): Response
+    public function discover(Request $request, Response $response): Response
     {
         $args = [
             'title' => 'Discover'

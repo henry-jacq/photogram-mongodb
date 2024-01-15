@@ -10,14 +10,17 @@ use App\Controller\ProfileController;
 use App\Middleware\AuthoriseMiddleware;
 
 return function (App $app) {
+
     // User Routes
+    // Prevent user routes access for not logged in users
     $app->group('/', function (RouteCollectorProxy $group) {
-        $group->get('', [HomeController::class, 'indexView']);
-        $group->get('discover', [HomeController::class, 'discoverView']);
-        $group->get('profile/{name}', [ProfileController::class, 'profileView']);
+        $group->get('home', [HomeController::class, 'home']);
+        $group->get('discover', [HomeController::class, 'discover']);
+        $group->get('profile/{name}', [ProfileController::class, 'profile']);
     })->add(AuthoriseMiddleware::class);
 
     // Auth Routes
+    // Prevent auth routes access for logged in users
     $app->group('/', function (RouteCollectorProxy $group) {
         $group->get('', [AuthController::class, 'landingView']);
         $group->get('login', [AuthController::class, 'loginView']);
@@ -26,7 +29,7 @@ return function (App $app) {
     })->add(AuthMiddleware::class);
 
     $app->get('/logout', [AuthController::class, 'logout']);
-    
+
     // API Routes
     $app->group('/api', function (RouteCollectorProxy $group) {
         $group->any('/{namespace}/{resource}', [ApiController::class, 'process']);
