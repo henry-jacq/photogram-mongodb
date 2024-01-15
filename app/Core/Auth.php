@@ -3,34 +3,32 @@
 namespace App\Core;
 
 use Exception;
-// use App\Model\User;
+use App\Model\User;
 use App\Core\Session;
 use App\Interfaces\AuthInterface;
-// use App\Services\HashService;
 
 class Auth implements AuthInterface
 { 
     public function __construct(
-        // private readonly User $user,
+        private readonly User $user,
         private readonly Session $session,
-        // private readonly HashService $hasher,
     )
     {
     }
 
-    public function user()
-    {
-        
-    }
-    
     /**
      * Register user
      */
     public function register(array $credentials)
-    {      
+    {
+        // Amount of cost requires to generate a random hash
+        $options = [
+            'cost' => 8
+        ];
+
         $fullname = ucfirst(trim($credentials['fullname']));
-        $password = $this->hasher->make($credentials['password']);
-        $email = $this->user->validateEmail($credentials['email_address']);
+        $password = password_hash($credentials['password'], PASSWORD_DEFAULT, $options);
+        $email = $this->user->validateEmail($credentials['email']);
         $username = $this->user->validateUsername($credentials['username']);
 
         if ($email === false) {
@@ -38,16 +36,14 @@ class Auth implements AuthInterface
         }
         
         $data = [
-            'username' => $username,
             'fullname' => $fullname,
-            'password' => $password,
+            'username' => $username,
             'email' => $email,
-            'active' => 0,
-            'created_at' => now()
+            'password' => $password
         ];
 
         try {
-            if ($this->user->exists([$username, $email])) {
+            if ($this->user->exists($data)) {
                 return false;
             }
             
@@ -62,18 +58,22 @@ class Auth implements AuthInterface
      */
     public function login(array $credentials)
     {
-        $result = $this->user->exists($credentials['user']);
+        $data = [
+            'username' => $credentials['user'],
+            'email' => $credentials['user']
+        ];
         
-        if ($result) {
-            $user = $result[0];
-
-            if ($this->hasher->check($credentials['password'], $user['password'])) {
-                $this->session->put('user', $user['id']);
-                $this->user->id = $this->session->get('user');
-                return $this->user->getID();
+        $result = $this->user->exists($data);
+        
+        if ($result !== false) {
+            if (password_verify($credentials['password'], $result['password'])) {
+                // TODO: password hash verify
+                $this->session->put('user', (string) $result['_id']);
+                // $this->user->id = $this->session->get('user');
+                // return $this->user->getID();
+                return true;
             }
         }
-
         return false;
     }
     
