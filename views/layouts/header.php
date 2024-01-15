@@ -50,7 +50,7 @@
                                 </svg>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-md-end">
-                                <li><a class="dropdown-item" href="/profile/henry"><i class="bi bi-person-circle me-2"></i>My Profile</a></li>
+                                <li><a class="dropdown-item" href="/profile/<?= $user['username']?>"><i class="bi bi-person-circle me-2"></i>My Profile</a></li>
                                 <li><a class="dropdown-item" href="/profile/edit"><i class="bi bi-pencil me-2"></i>Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="/settings/account"><i class="bi bi-gear me-2"></i>Settings</a></li>
                                 <li class="dropdown-divider"></li>

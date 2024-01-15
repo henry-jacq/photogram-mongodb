@@ -15,8 +15,8 @@
     <div class="container mt-5">
         <div class="row mx-2 mb-2">
             <div class="col-md-7">
-                <h5 class="m-0"><?= ucfirst($name) ?> </h5>
-                <p class="mb-2">@<?= $name ?> <span class="small mb-2"> • App Developer</span></p>
+                <h5 class="m-0"><?= ucfirst($user['fullname']) ?> </h5>
+                <p class="mb-2">@<?= $user['username'] ?> <span class="small mb-2"> • App Developer</span></p>
                 <p class="text-secondary small"><i class="bi bi-geo-alt me-1"></i>Chennai, India</p>
                 <p>#!/bin/bash<br>
                     Full stack developer</p>

@@ -7,9 +7,9 @@
     
     {{header}}
     
-    <main class="container">
+    <section class="container">
         {{contents}}
-    </main>
+    </section>
 
     {{footer}}
 
