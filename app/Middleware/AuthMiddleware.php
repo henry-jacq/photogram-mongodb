@@ -19,7 +19,7 @@ class AuthMiddleware implements MiddlewareInterface
         if (!empty($_SESSION['user'])) {
             return $this->responseFactory
             ->createResponse(302)
-            ->withHeader('Location', '/');
+            ->withHeader('Location', '/home');
         }
         
         return $handler->handle($request);
