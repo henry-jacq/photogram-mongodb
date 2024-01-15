@@ -6,6 +6,8 @@ use \Exception;
 use MongoDB\Client;
 use MongoDB\Database;
 use MongoDB\Collection;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Model\BSONDocument;
 use MongoDB\Model\IndexInfoIterator;
 
 class MongoDB
@@ -95,6 +97,11 @@ class MongoDB
         return $this->collection;
     }
 
+    public function createMongoId(string $id)
+    {
+        return new ObjectId($id);
+    }
+
     public function find($filter = [], $options = []): array
     {
         if (!$this->collection) {
@@ -113,7 +120,7 @@ class MongoDB
         }
     }
 
-    public function findOne($filter = [], $options = []): ?array
+    public function findOne($filter = [], $options = []): BSONDocument|null
     {
         if (!$this->collection) {
             throw new Exception("No collection selected.");
