@@ -11,19 +11,28 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class ProfileController extends Controller
 {
     public function __construct(
-        private readonly View $view,
-        private readonly Config $config
+        private readonly View $view
     ) {
-        parent::__construct($view, $config);
+        parent::__construct($view);
     }
 
     public function profile(Request $request, Response $response): Response
     {
         $name = $request->getAttribute('name');
         $args = [
+            'name' => $name,
             'title' => ucfirst($name) . "'s Profile",
-            'name' => $name
+            'user' => $request->getAttribute('userData')
         ];
         return $this->render($response, 'user/profile', $args);
+    }
+
+    public function edit(Request $request, Response $response): Response
+    {
+        $args = [
+            'title' => "Edit Profile",
+            'user' => $request->getAttribute('userData')
+        ];
+        return $this->render($response, 'user/edit', $args);
     }
 }
