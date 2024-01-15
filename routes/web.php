@@ -19,6 +19,7 @@ return function (App $app) {
 
     // Auth Routes
     $app->group('/', function (RouteCollectorProxy $group) {
+        $group->get('', [AuthController::class, 'landingView']);
         $group->get('login', [AuthController::class, 'loginView']);
         $group->get('register', [AuthController::class, 'registerView']);
         $group->get('forgot-password', [AuthController::class, 'forgotPassword']);
