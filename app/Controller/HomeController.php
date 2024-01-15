@@ -14,11 +14,12 @@ class HomeController extends Controller
     ) {
         parent::__construct($view);
     }
-    
+
     public function home(Request $request, Response $response): Response
     {
         $args = [
-            'title' => 'Home'
+            'title' => 'Home',
+            'user' => $request->getAttribute('userData')
         ];
         return $this->render($response, 'user/home', $args);
     }
@@ -26,7 +27,8 @@ class HomeController extends Controller
     public function discover(Request $request, Response $response): Response
     {
         $args = [
-            'title' => 'Discover'
+            'title' => 'Discover',
+            'user' => $request->getAttribute('userData')
         ];
         return $this->render($response, 'user/discover', $args);
     }
