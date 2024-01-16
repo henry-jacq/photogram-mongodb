@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Closure;
 use App\Core\Auth;
+use App\Model\Post;
 use App\Model\User;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -11,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class ApiController
 {
     protected $data;
+    protected $files;
     protected $resource;
     protected $namespace;
     private $current_call;
@@ -21,7 +23,8 @@ class ApiController
 
     public function __construct(
         private readonly Auth $auth,
-        private readonly User $user
+        private readonly User $user,
+        private readonly Post $post
     )
     {
     }
@@ -33,6 +36,7 @@ class ApiController
     {
         $this->slimRequest = $request;
         $this->slimResponse = $response;
+        $this->files = $_FILES;
         $this->data = $this->cleanInputs($request->getParsedBody());
         $resource = trim($request->getAttribute('resource'));
         $namespace = trim($request->getAttribute('namespace'));
