@@ -1,8 +1,10 @@
 <?php
 
-use App\Core\Auth;
 use Slim\App;
+use App\Core\Auth;
 use App\Core\View;
+use App\Model\Post;
+use App\Model\User;
 use MongoDB\Client;
 use App\Core\Config;
 use App\Core\MongoDB;
@@ -13,7 +15,6 @@ use Slim\Factory\AppFactory;
 use App\Interfaces\SessionInterface;
 use Psr\Container\ContainerInterface;
 use App\Interfaces\DatabaseConnectorInterface;
-use App\Model\User;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
@@ -57,5 +58,8 @@ return [
             $container->get(User::class),
             $container->get(Session::class)
         );
+    },
+    Post::class => function (ContainerInterface $container) {
+        return new Post($container->get(MongoDB::class));
     }
 ];
