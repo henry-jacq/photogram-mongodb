@@ -40,7 +40,7 @@ class Model
 
     public function findOne(array $data)
     {
-        return $this->db->findOne($data);
+        return $this->collection->findOne($data);
     }
 
     // Create operation
