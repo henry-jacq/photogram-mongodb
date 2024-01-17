@@ -1,3 +1,30 @@
+// Init Masonry
+var grid = document.querySelector('#masonry-area');
+if (grid) {
+    // Initialize masonry
+    var masonry = new Masonry(grid, {
+        percentPosition: true
+    });
+    // Layout Masonry after each image loads
+    imagesLoaded(grid).on('progress', function () {
+        masonry.layout();
+    });
+}
+
+$('.carousel-control-prev, .carousel-control-next').on('click', function () {
+    masonry.layout();
+});
+
+// Disable right-click on Images
+$('img').on("contextmenu", function () {
+    return false;
+});
+
+// Disable Image Dragging
+$("img").on("dragstart", function (event) {
+    event.preventDefault();
+});
+
 // Create Post Modal
 $('#postUploadButton').on('click', function () {
     var title = `<i class="bi bi-plus-circle-dotted me-2"></i>Create Post`;
