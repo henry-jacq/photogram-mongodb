@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Exception;
 use App\Core\Model;
-
+use Carbon\Carbon;
 
 class Post extends Model
 {
@@ -19,6 +19,22 @@ class Post extends Model
         }
     }
 
+    public function getAllPosts()
+    {
+        $posts = $this->findAll();
+        $formattedPosts = [];
+
+        foreach ($posts as $post) {
+            $time = Carbon::parse($post->created_at);
+            $formattedPost = $post->getArrayCopy();
+            $formattedPost['created_at'] = $time->diffForHumans();
+            $formattedPost['likes'] = count($post['likes']);
+            $formattedPosts[] = $formattedPost;
+        }
+
+        return $formattedPosts;
+    }
+
     public function handleImages(array $data)
     {
         $output = array();
@@ -31,7 +47,7 @@ class Post extends Model
 
         return $output;
     }
-    
+
     public function createPost(array $data)
     {
         $images = $this->handleImages($data['images']);
@@ -57,7 +73,7 @@ class Post extends Model
     public function storeImage(string $image_tmp)
     {
         if (is_file($image_tmp) && exif_imagetype($image_tmp) !== false) {
-            $name = md5(time().mt_rand(0, 99999));
+            $name = md5(time() . mt_rand(0, 99999));
             $ext = image_type_to_extension(exif_imagetype($image_tmp));
             $image = $name . $ext;
             $image_path = $this->storage_path . $image;
@@ -67,9 +83,18 @@ class Post extends Model
             }
 
             throw new Exception("Can't move the uploaded file");
-
         } else {
             throw new Exception("Not a valid image path!");
         }
+    }
+
+    public function getImage(string $image)
+    {
+        $filePath = $this->storage_path . $image;
+        if (file_exists($filePath) && is_file($filePath)) {
+            return file_get_contents($filePath);
+        }
+
+        return false;
     }
 }

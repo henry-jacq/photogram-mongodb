@@ -18,6 +18,7 @@ return function (App $app) {
         $group->get('discover', [HomeController::class, 'discover']);
         $group->get('profile/edit', [ProfileController::class, 'edit']);
         $group->get('profile/{name}', [ProfileController::class, 'profile']);
+        $group->get('files/{category}/{image}', [HomeController::class, 'files']);
     })->add(AuthoriseMiddleware::class);
 
     // Auth Routes
