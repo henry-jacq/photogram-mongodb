@@ -25,6 +25,26 @@ $("img").on("dragstart", function (event) {
     event.preventDefault();
 });
 
+// Scroll to top
+if ($('#scroll-top-btn').length != 0) {
+    var scrollTopBtn = $('#scroll-top-btn');
+    $(window).on('scroll', function () {
+        var scrollPos = $(this).scrollTop();
+
+        if (scrollPos > 0) {
+            scrollTopBtn.removeClass('d-none').fadeIn('slow');
+        } else {
+            scrollTopBtn.fadeOut(function () {
+                $(this).addClass('d-none');
+            });
+        }
+    });
+    scrollTopBtn.on('click', function (e) {
+        e.preventDefault();
+        $('html').animate({ scrollTop: 0 }, 'fast');
+    });
+}
+
 // Create Post Modal
 $('#postUploadButton').on('click', function () {
     var title = `<i class="bi bi-plus-circle-dotted me-2"></i>Create Post`;
