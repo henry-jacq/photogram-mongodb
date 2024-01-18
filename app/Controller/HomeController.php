@@ -41,7 +41,7 @@ class HomeController extends Controller
         $category = $request->getAttribute('category');
         $imageName = $request->getAttribute('image');
 
-        $path = '/' . $category . '/' . $imageName;
+        $path = STORAGE_PATH . '/' . $category . '/' . $imageName;
 
         if ($category == 'posts') {
             $image = $this->post->getImage($imageName);
@@ -55,11 +55,11 @@ class HomeController extends Controller
         $response->getBody()->write($image);
 
         return $response
-        ->withHeader('Content-Type', mime_content_type(STORAGE_PATH . $path))
-        ->withHeader('Content-Length', filesize(STORAGE_PATH . $path))
-        ->withHeader('Cache-Control', 'max-age='. (60 * 60 * 24 * 365))
+        ->withHeader('Content-Type', mime_content_type($path))
+        ->withHeader('Content-Length', filesize($path))
+        ->withHeader('Cache-Control', 'max-age=' . (60 * 60 * 24 * 365))
         ->withHeader('Expires', gmdate(DATE_RFC1123, time() + 60 * 60 * 24 * 365))
-        ->withHeader('Last-Modified', gmdate(DATE_RFC1123, filemtime(STORAGE_PATH . $path)))
-        ->withoutHeader('Pragma');
+        ->withHeader('Last-Modified', gmdate(DATE_RFC1123, filemtime($path)))
+        ->withHeader('Pragma', '');
     }
 }
