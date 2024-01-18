@@ -21,14 +21,20 @@ class Post extends Model
 
     public function getAllPosts()
     {
-        $posts = $this->findAll();
+        $cursor = $this->findAll();
+
+        $posts = iterator_to_array($cursor);
+        usort($posts, function ($a, $b) {
+            return strtotime($b->created_at) - strtotime($a->created_at);
+        });
+
         $formattedPosts = [];
 
         foreach ($posts as $post) {
             $time = Carbon::parse($post->created_at);
             $formattedPost = $post->getArrayCopy();
             $formattedPost['created_at'] = $time->diffForHumans();
-            $formattedPost['likes'] = count($post['likes']);
+            $formattedPost['likes'] = count($post->likes);
             $formattedPosts[] = $formattedPost;
         }
 
