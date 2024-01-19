@@ -28,6 +28,9 @@ class Post extends Model
             return strtotime($b->created_at) - strtotime($a->created_at);
         });
 
+        $userIds = array_column($posts, 'user_id');
+        $userData = $this->getUsersByIds($userIds);
+
         $formattedPosts = [];
 
         foreach ($posts as $post) {
@@ -35,10 +38,31 @@ class Post extends Model
             $formattedPost = $post->getArrayCopy();
             $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
+            $formattedPost['userData'] = $userData[$post->user_id] ?? null;
             $formattedPosts[] = $formattedPost;
         }
 
         return $formattedPosts;
+    }
+
+    /**
+     * Return list of users data
+     */
+    public function getUsersByIds(array $userIds)
+    {
+        $objectIds = array_map(function ($userId) {
+            return $this->createMongoId($userId);
+        }, $userIds);
+
+        $c = $this->db->selectCollection('users');
+        $users = $c->find(['_id' => ['$in' => $objectIds]]);
+        $userData = [];
+
+        foreach ($users as $user) {
+            $userData[(string)$user->_id] = $user;
+        }
+
+        return $userData;
     }
 
     public function handleImages(array $data)
