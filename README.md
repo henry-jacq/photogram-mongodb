@@ -133,20 +133,6 @@ sudo chown -R www-data:www-data storage/
 sudo chmod -R 755 storage/
 ```
 
-Create config using make_config PHP script:
-- Fill in the prompts to make the Photogram work.
-- If have doubts, check the reference config at `config/example.photogram.json`
-```bash
-cd config/
-php make_config
-```
-
-Apply migrations to database:
-- This will create the database with necessary tables and fields for photogram.
-- NOTE: Before executing migrations, check that you are properly connected to the database.
-```bash
-php database/migrations.php
-```
 
 ## Usage
 
