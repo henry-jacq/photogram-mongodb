@@ -19,6 +19,35 @@ class Post extends Model
         }
     }
 
+    /**
+     * Get user posts by user ID
+     */
+    public function getPostsById(string|object $user_id)
+    {
+        $cursor = $this->findById($user_id, 'user_id', false, true);
+
+        $posts = iterator_to_array($cursor);
+
+        usort($posts, function ($a, $b) {
+            return strtotime($b->created_at) - strtotime($a->created_at);
+        });
+
+        $userData = $this->getUsersByIds([$user_id]);
+
+        $formattedPosts = [];
+
+        foreach ($posts as $post) {
+            $time = Carbon::parse($post->created_at);
+            $formattedPost = (array)$post;
+            $formattedPost['created_at'] = $time->diffForHumans();
+            $formattedPost['likes'] = count($post->likes);
+            $formattedPost['userData'] = $userData[$post->user_id] ?? null;
+            $formattedPosts[] = $formattedPost;
+        }
+
+        return $formattedPosts;
+    }
+
     public function getAllPosts()
     {
         $cursor = $this->findAll();
@@ -35,7 +64,7 @@ class Post extends Model
 
         foreach ($posts as $post) {
             $time = Carbon::parse($post->created_at);
-            $formattedPost = $post->getArrayCopy();
+            $formattedPost = (array)$post;
             $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
             $formattedPost['userData'] = $userData[$post->user_id] ?? null;
