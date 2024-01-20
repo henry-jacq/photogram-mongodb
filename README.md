@@ -68,6 +68,48 @@ Enabling apache modules:
 sudo a2enmod headers
 sudo a2enmod rewrite
 sudo a2enmod actions
+sudo a2enmod expires
+sudo a2enmod deflate
+```
+
+Add apache vhost:
+```bash
+sudo touch /etc/apache2/sites-available/photogram.conf
+```
+- Then paste the following snippet into photogram.conf
+
+- Replace the path with your project's path
+```apache
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /home/user/htdocs/photogram/public
+    ServerName photogram.local
+
+    <Directory /home/user/htdocs/photogram/public/>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <IfModule mod_deflate.c>
+        AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json application/xml image/svg+xml
+    </IfModule>
+
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType image/jpg "access plus 1 year"
+        ExpiresByType image/jpeg "access plus 1 year"
+        ExpiresByType image/png "access plus 1 year"
+        ExpiresByType image/gif "access plus 1 year"
+    </IfModule>
+
+    ServerSignature Off
+
+    LimitRequestBody 1024000
+    
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
 ```
 
 Restart apache to apply changes
