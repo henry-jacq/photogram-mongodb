@@ -50,6 +50,33 @@ class View implements ViewInterface
     }
 
     /**
+     * Generates the layout view
+     */
+    public function renderComponent($component, $params = [])
+    {
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
+
+        if (!str_contains($component, '.php')) {
+            $component = $component . '.php';
+        }
+
+        // Inserting global variables
+        foreach ($this->globals as $key => $value) {
+            $$key = $value;
+        }
+
+        $path = VIEW_PATH . '/components/' . $component;
+
+        if (file_exists($path)) {
+            include_once $path;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Generates the template view
      */
     public function renderTemplate($template, $params = [])
