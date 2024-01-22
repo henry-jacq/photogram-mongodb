@@ -15,7 +15,7 @@ interface ViewInterface
 
     public function renderBaseView(string $baseView, $params = []);
 
-    public function createPage(string $view, $params = [], $withFrame): View;
+    public function createPage(string $view, $params = []): View;
 
     public function render(): void;
 
@@ -23,5 +23,5 @@ interface ViewInterface
 
     public function getGlobals(): array;
 
-    public function pageFrame(bool $withFrame, array $params): View;
+    public function pageFrame(array $params): View;
 }

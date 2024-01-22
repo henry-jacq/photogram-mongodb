@@ -140,7 +140,7 @@ class View implements ViewInterface
     /**
      * Creates a page with the template name and params
      */
-    public function createPage(string $view, $params = [], $withFrame = true): View
+    public function createPage(string $view, $params = []): View
     {
         if (!str_contains($this->baseViewName ,'.php')) {
             $this->baseViewName = $this->baseViewName . '.php';
@@ -148,7 +148,7 @@ class View implements ViewInterface
         $mainView = $this->renderBaseView($this->baseViewName, $params);
         $templateView = $this->renderTemplate($view, $params);
         $this->resultView = str_replace($this->contentsBlock, $templateView, $mainView);
-        $this->pageFrame($withFrame, $params);
+        $this->pageFrame($params);
         return $this;
     }
 
@@ -187,25 +187,33 @@ class View implements ViewInterface
      * 
      * It is a custom implementation, you can modify this to your needs.
      */
-    public function pageFrame(bool $withFrame, array $params): View
+    public function pageFrame(array $params): View
     {
         if (null == $this->resultView) {
             throw new Exception('Page is not rendered');
         }
 
         $baseView = $this->resultView;
-        $header = $this->renderLayout('header', $params);
-        $footer = $this->renderLayout('footer');
 
-        if ($withFrame) {
-            $output = str_replace([$this->headerBlock, $this->footerBlock], [$header, $footer], $baseView);
+        $header = $params['header'] ?? false;
+        if ($header) {
+            $headerContent = $this->renderLayout('header', $params);
+            $baseView = str_replace($this->headerBlock, $headerContent, $baseView);
         } else {
-            $output = str_replace([$this->headerBlock, $this->footerBlock], '', $baseView);
+            $baseView = str_replace($this->headerBlock, '', $baseView);
         }
-        
-        $this->resultView = $output;
-        
+
+        $footer = $params['footer'] ?? false;
+        if ($footer) {
+            $footerContent = $this->renderLayout('footer');
+            $baseView = str_replace($this->footerBlock, $footerContent, $baseView);
+        } else {
+            $baseView = str_replace($this->footerBlock, '', $baseView);
+        }
+
+        $this->resultView = $baseView;
+
         return $this;
     }
-
+    
 }
