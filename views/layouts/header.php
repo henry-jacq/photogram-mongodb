@@ -24,7 +24,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a role="button" class="nav-link active" aria-current="page" onclick="dialog('Not Implemented!',' This feature is not implemented');">
+                            <a role="button" id="postUploadButton" class="nav-link active" aria-current="page">
                                 <i class="bi bi-plus-square fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Create Post"></i><span class="d-md-none ms-2">Create Post</span>
                             </a>
                         </li>
