@@ -67,21 +67,29 @@ class Auth implements AuthInterface
         
         if ($result !== false) {
             if (password_verify($credentials['password'], $result['password'])) {
-                // TODO: password hash verify
                 $this->session->put('user', (string) $result['_id']);
-                // $this->user->id = $this->session->get('user');
-                // return $this->user->getID();
                 return true;
             }
         }
         return false;
     }
     
+    /**
+     * Logout user from the session
+     */
     public function logout(): void
     {
         $this->session->forget('user');
-
-        // $this->user = null;
     }
-    
+
+    /**
+     * Check if the user is logged in or not
+     */
+    public function isAuthenticated(): bool
+    {
+        if ($this->session->get('user') !== null) {
+            return true;
+        }
+        return false;
+    }
 }

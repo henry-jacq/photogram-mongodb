@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Closure;
 use App\Core\Auth;
+use App\Core\Session;
 use App\Model\Post;
 use App\Model\User;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -13,18 +14,20 @@ class ApiController
 {
     protected $data;
     protected $files;
+    protected $params;
     protected $resource;
     protected $namespace;
     private $current_call;
     protected $slimRequest;
     protected $slimResponse;
-    protected $content_type = 'application/json';
-    protected $apiRoute = ROUTES_PATH . DIRECTORY_SEPARATOR . 'api';
+    private const CONTENT_TYPE = 'application/json';
+    private const API_ROUTE = ROUTES_PATH . DIRECTORY_SEPARATOR . 'api';
 
     public function __construct(
         private readonly Auth $auth,
         private readonly User $user,
-        private readonly Post $post
+        private readonly Post $post,
+        private readonly Session $session
     )
     {
     }
@@ -34,10 +37,15 @@ class ApiController
      */
     public function process(Request $request, Response $response): Response
     {
+        $this->files = $_FILES;
         $this->slimRequest = $request;
         $this->slimResponse = $response;
-        $this->files = $_FILES;
-        $this->data = $this->cleanInputs($request->getParsedBody());
+        $this->params = $request->getServerParams();
+        $get = $this->cleanInputs($request->getQueryParams());
+        $post = $this->cleanInputs($request->getParsedBody() ?? []);
+
+        $this->data = array_merge($get, $post);
+        
         $resource = trim($request->getAttribute('resource'));
         $namespace = trim($request->getAttribute('namespace'));
         $this->namespace = strtolower($namespace);
@@ -51,7 +59,7 @@ class ApiController
      */
     protected function fileExists()
     {
-        $apiPath = $this->apiRoute . DIRECTORY_SEPARATOR;
+        $apiPath = self::API_ROUTE . DIRECTORY_SEPARATOR;
         $filePath = $this->namespace . DIRECTORY_SEPARATOR . $this->resource . '.php';
         $fullPath = $apiPath . $filePath;
         if (file_exists($fullPath)) {
@@ -71,7 +79,10 @@ class ApiController
             $this->current_call = Closure::bind(${$func}, $this, get_class());
             return $this->$func();
         } else {
-            return $this->response(['error' => 'method_not_found'], 404);
+            return $this->response([
+                'error' => 'method_not_found',
+                'resource' => $this->resource
+            ], 404);
         }
     }
 
@@ -92,6 +103,9 @@ class ApiController
         return $exists;
     }
 
+    /**
+     * Clean request inputs
+     */
     private function cleanInputs($data)
     {
         $clean_input = array();
@@ -119,11 +133,46 @@ class ApiController
         if (is_callable($this->current_call)) {
             return call_user_func_array($this->current_call, $args);
         } else {
-            $error = ['error' => 'method_not_callable', 'method' => $method];
-            $this->response($error, 404);
+            $error = [
+                'error' => 'Method not Allowed',
+                'method' => $method
+            ];
+            $this->response($error, 405);
         }
     }
-   
+
+    /**
+     * Return request method
+     */
+    public function getMethod(): string
+    {
+        return $this->slimRequest->getMethod();
+    }
+
+    /**
+     * Check request method
+     */
+    public function isMethod(string $method): bool
+    {
+        return strtoupper($this->getMethod()) == strtoupper($method);
+    }
+
+    /**
+     * Check if user authenticated or not
+     */
+    public function isAuthenticated(): bool
+    {
+        return $this->auth->isAuthenticated();
+    }
+
+    /**
+     * Return user Id from session
+     */
+    public function getUserId(): string
+    {
+        return $this->session->get('user');
+    }
+    
     /**
      * Return JSON Response
      */
@@ -131,7 +180,7 @@ class ApiController
     {
         $this->slimResponse->getBody()->write(packJson($payload));
         return $this->slimResponse
-            ->withHeader('Content-Type', $this->content_type)
+            ->withHeader('Content-Type', self::CONTENT_TYPE)
             ->withStatus($statusCode);
     }
 }
