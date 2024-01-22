@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use Closure;
 use App\Core\Auth;
-use App\Core\Session;
 use App\Model\Post;
 use App\Model\User;
+use App\Core\Session;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -21,6 +22,16 @@ class ApiController
     protected $slimRequest;
     protected $slimResponse;
     private const CONTENT_TYPE = 'application/json';
+    private const ALLOWED_CONTENT_TYPES = [
+        'application/json',
+        'application/zip',
+        'text/html'
+    ];
+    private const ALLOWED_HEADERS = [
+        'Content-Type', 'Content-Length',
+        'Content-Disposition', 'Pragma',
+        'Cache-Control', 'Expires', 'Last-Modified'
+    ];
     private const API_ROUTE = ROUTES_PATH . DIRECTORY_SEPARATOR . 'api';
 
     public function __construct(
@@ -41,10 +52,13 @@ class ApiController
         $this->slimRequest = $request;
         $this->slimResponse = $response;
         $this->params = $request->getServerParams();
+
         $get = $this->cleanInputs($request->getQueryParams());
         $post = $this->cleanInputs($request->getParsedBody() ?? []);
-
         $this->data = array_merge($get, $post);
+
+        $this->negotiateHeaders($request->getHeaders());
+        $this->negotiateContentType($request->getHeader('Accept'));
         
         $resource = trim($request->getAttribute('resource'));
         $namespace = trim($request->getAttribute('namespace'));
@@ -120,6 +134,45 @@ class ApiController
         return $clean_input;
     }
 
+    private function packData(array $data, string $contentType)
+    {
+        switch ($contentType) {
+            case 'application/json':
+                return packJson($data);
+            case 'application/zip':
+                break;
+            case 'text/html':
+                break;
+                // Add more cases for additional content types
+            default:
+                return packJson($data);
+        }
+    }
+
+    private function negotiateContentType(array $acceptedContentTypes): string
+    {
+        foreach (self::ALLOWED_CONTENT_TYPES as $allowedContentType) {
+            if (in_array($allowedContentType, $acceptedContentTypes)) {
+                return $allowedContentType;
+            }
+        }
+
+        throw new InvalidArgumentException('Unsupported Content Type');
+    }
+
+    private function negotiateHeaders(array $requestHeaders): array
+    {
+        $negotiatedHeaders = [];
+        foreach ($requestHeaders as $header => $values) {
+            $header = ucwords(strtolower($header));
+            if (in_array($header, self::ALLOWED_HEADERS)) {
+                $negotiatedHeaders[$header] = implode(', ', $values);
+            }
+        }
+
+        return $negotiatedHeaders;
+    }
+
     public function die()
     {
         $data = [
@@ -176,11 +229,23 @@ class ApiController
     /**
      * Return JSON Response
      */
-    public function response(array $payload, int $statusCode = 200)
+    public function response(
+        array $payload = [], int $statusCode = 200, 
+        $contentType = self::CONTENT_TYPE, array $headers = []
+    )
     {
-        $this->slimResponse->getBody()->write(packJson($payload));
+        $this->slimResponse->getBody()->write(
+            $this->packData($payload, $contentType)
+        );
+
+        if (!empty($headers)) {
+            foreach ($headers as $header => $value) {
+                $this->slimResponse = $this->slimResponse->withHeader($header, $value);
+            }
+        }
+        
         return $this->slimResponse
-            ->withHeader('Content-Type', self::CONTENT_TYPE)
+            ->withHeader('Content-Type', $contentType)
             ->withStatus($statusCode);
     }
 }
