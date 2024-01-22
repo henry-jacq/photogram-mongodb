@@ -50,10 +50,20 @@ class Model
     }
 
     // Read operation
-    public function findById($id)
+    public function findById(string $id, $index = '_id', $genMongoId = true, $multiple = false)
     {
+        if ($genMongoId) {
+            $id = $this->createMongoId($id);
+        }
+
+        if ($multiple) {
+            return $this->collection->find([
+                $index => $id
+            ]);
+        }
+        
         return $this->collection->findOne([
-            '_id' => $this->createMongoId($id)
+            $index => $id
         ]);
     }
 
@@ -64,18 +74,18 @@ class Model
     }
     
     // Update operation
-    public function update($id, $data)
+    public function update($id, $data, $index = '_id')
     {
         $this->collection->updateOne([
-            '_id' => $this->createMongoId($id)
+            $index => $this->createMongoId($id)
         ], ['$set' => $data]);
     }
 
     // Delete operation
-    public function delete($id)
+    public function delete($id, $index = '_id')
     {
         $this->collection->deleteOne([
-            '_id' => $this->createMongoId($id)
+            $index => $this->createMongoId($id)
         ]);
     }
 
