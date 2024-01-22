@@ -25,6 +25,7 @@ return function (App $app) {
     // Prevent auth routes access for logged in users
     $app->group('/', function (RouteCollectorProxy $group) {
         $group->get('', [AuthController::class, 'landingView']);
+        $group->get('onboarding', [AuthController::class, 'onboardView']);
         $group->get('login', [AuthController::class, 'loginView']);
         $group->get('register', [AuthController::class, 'registerView']);
         $group->get('forgot-password', [AuthController::class, 'forgotPassword']);

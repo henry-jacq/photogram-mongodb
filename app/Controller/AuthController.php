@@ -24,7 +24,15 @@ class AuthController extends Controller
         $args = [
             'title' => 'Share Memories'
         ];
-        return $this->render($response, 'auth/landing', $args, false);
+        return $this->render($response, 'auth/landing', $args, false, false);
+    }
+
+    public function onboardView(Request $request, Response $response): Response
+    {
+        $args = [
+            'title' => 'Onboarding'
+        ];
+        return $this->render($response, 'auth/onboarding', $args, false, false);
     }
     
     public function loginView(Request $request, Response $response): Response
@@ -32,7 +40,7 @@ class AuthController extends Controller
         $args = [
             'title' => 'Login'
         ];
-        return $this->render($response, 'auth/login', $args, false);
+        return $this->render($response, 'auth/login', $args, false, false);
     }
 
     public function registerView(Request $request, Response $response): Response
@@ -40,7 +48,7 @@ class AuthController extends Controller
         $args = [
             'title' => 'Register'
         ];
-        return $this->render($response, 'auth/register', $args, false);
+        return $this->render($response, 'auth/register', $args, false, false);
     }
 
     public function forgotPassword(Request $request, Response $response): Response
@@ -49,7 +57,7 @@ class AuthController extends Controller
             'title' => 'Forgot password',
             'name' => 'Henry'
         ];
-        return $this->render($response, 'auth/reset_password', $args, false);
+        return $this->render($response, 'auth/reset_password', $args, false, false);
     }
 
     public function logout(Request $request, Response $response): Response
