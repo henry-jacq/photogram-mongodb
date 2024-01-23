@@ -215,5 +215,14 @@ class View implements ViewInterface
 
         return $this;
     }
+
+    public function isAuthenticated()
+    {
+        if (empty($_SESSION['user'])) {
+            return false;
+        }
+
+        return true;
+    }
     
 }
