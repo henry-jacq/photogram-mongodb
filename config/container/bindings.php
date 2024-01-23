@@ -1,6 +1,7 @@
 <?php
 
 use Slim\App;
+use ZipArchive;
 use App\Core\Auth;
 use App\Core\View;
 use App\Model\Post;
@@ -14,7 +15,6 @@ use function DI\create;
 use Slim\Factory\AppFactory;
 use App\Interfaces\SessionInterface;
 use Psr\Container\ContainerInterface;
-use App\Interfaces\DatabaseConnectorInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
@@ -59,7 +59,13 @@ return [
             $container->get(Session::class)
         );
     },
+    ZipArchive::class => function() {
+        return new ZipArchive();
+    },
     Post::class => function (ContainerInterface $container) {
-        return new Post($container->get(MongoDB::class));
+        return new Post(
+            $container->get(MongoDB::class),
+            $container->get(ZipArchive::class)
+        );
     }
 ];

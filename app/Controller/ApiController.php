@@ -25,6 +25,8 @@ class ApiController
     private const ALLOWED_CONTENT_TYPES = [
         'application/json',
         'application/zip',
+        'application/xml',
+        'application/xhtml',
         'text/html'
     ];
     private const ALLOWED_HEADERS = [
@@ -57,8 +59,8 @@ class ApiController
         $post = $this->cleanInputs($request->getParsedBody() ?? []);
         $this->data = array_merge($get, $post);
 
-        $this->negotiateHeaders($request->getHeaders());
-        $this->negotiateContentType($request->getHeader('Accept'));
+        // $this->negotiateHeaders($request->getHeaders());
+        // $this->negotiateContentType($request->getHeader('Accept'));
         
         $resource = trim($request->getAttribute('resource'));
         $namespace = trim($request->getAttribute('namespace'));
@@ -134,14 +136,30 @@ class ApiController
         return $clean_input;
     }
 
+    public function isXhr()
+    {
+        $request = $this->slimRequest;
+        if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
+            return true;
+        }
+        return false;
+    }
+
     private function packData(array $data, string $contentType)
     {
         switch ($contentType) {
             case 'application/json':
                 return packJson($data);
             case 'application/zip':
-                break;
+                $zipFile = $data['zipFile'];
+
+                if (file_exists($zipFile)) {
+                    return file_get_contents($zipFile);
+                } else {
+                    return packJson(['error' => 'File not found'], 'application/json');
+                }
             case 'text/html':
+                // Add HTML handling logic here
                 break;
                 // Add more cases for additional content types
             default:
