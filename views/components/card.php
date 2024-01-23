@@ -1,6 +1,6 @@
 <div class="row g-3" id="masonry-area">
-<?php
-    foreach ($posts as $p) :?>
+    <?php
+    foreach ($posts as $p) : ?>
         <div class="col-xxl-3 col-lg-4 col-md-6" id="post-<?= $p['_id'] ?>">
             <div class="card shadow-lg">
                 <header class="card-header p-2 user-select-none border-0">
@@ -28,8 +28,8 @@
                                 <i class="bi bi-three-dots-vertical"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="postCardAction-<?= $p['_id'] ?>">
-                                <li>
-                                    <a class="dropdown-item btn-download" role="button" value="/files/posts/02072c0c398d5d761dc06f602f1e1938.png">
+                                <li data-id="<?= $p['_id'] ?>">
+                                    <a class="dropdown-item btn-download" role="button">
                                         <i class="fa-solid fa-download" aria-hidden="true"></i>
                                         <span class="ms-2">Download</span>
                                     </a>

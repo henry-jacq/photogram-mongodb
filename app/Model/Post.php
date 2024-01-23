@@ -13,7 +13,7 @@ class Post extends Model
     protected $collectionName = 'posts';
     protected $storage_path = STORAGE_PATH . '/posts/';
 
-    public function __construct($mongoDB)
+    public function __construct($mongoDB, private readonly ZipArchive $zip)
     {
         parent::__construct($mongoDB, $this->collectionName);
         if (!file_exists($this->storage_path)) {
@@ -131,6 +131,41 @@ class Post extends Model
         return $this->create($schema);
     }
 
+    public function getPostZip(string $postId)
+    {
+        $images = $this->getPostImages($postId);
+
+        if (!$images) {
+            return false;
+        }
+
+        $name = $this->getZipFileName();
+        $tempPath = STORAGE_PATH . DIRECTORY_SEPARATOR . 'temp';
+        $zipPath = $tempPath . DIRECTORY_SEPARATOR . $name;
+        if (!file_exists($tempPath)) {
+            mkdir($tempPath);
+        }
+        if ($this->zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            return false;   // Unable to open the zip file
+        }
+
+        foreach ($images as $image) {
+            $path = $this->storage_path . $image;
+            $this->zip->addFile($path, $image);
+        }
+
+        $this->zip->close();
+        return $zipPath;
+    }
+
+    private function getZipFileName()
+    {
+        $formattedDateTime = (new DateTime())->format('His');
+        $randomString = bin2hex(random_bytes(4));
+        $name = "Photogram_Image_{$formattedDateTime}{$randomString}.zip";
+        return $name;
+    }
+
     /**
      * Delete post with images
      */
@@ -148,10 +183,18 @@ class Post extends Model
             $this->delete($id);
 
             return true;
-
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public function updatePostText(string $id, string $text)
+    {
+        $data = ['caption' => $text];
+
+        $this->update($id, $data);
+
+        return true;
     }
 
     public function storeImage(string $image_tmp)
