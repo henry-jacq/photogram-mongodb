@@ -2,9 +2,11 @@
 
 namespace App\Model;
 
+use DateTime;
 use Exception;
-use App\Core\Model;
+use ZipArchive;
 use Carbon\Carbon;
+use App\Core\Model;
 
 class Post extends Model
 {
@@ -129,6 +131,29 @@ class Post extends Model
         return $this->create($schema);
     }
 
+    /**
+     * Delete post with images
+     */
+    public function deletePost(string $id)
+    {
+        try {
+            $data = $this->findById($id);
+
+            if (is_null($data)) {
+                return false;
+            }
+
+            $this->deleteImage(iterator_to_array($data));
+
+            $this->delete($id);
+
+            return true;
+
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
     public function storeImage(string $image_tmp)
     {
         if (is_file($image_tmp) && exif_imagetype($image_tmp) !== false) {
@@ -155,5 +180,40 @@ class Post extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Return the list of image names related to post
+     */
+    protected function getPostImages(string $pid)
+    {
+        $post = $this->findById($pid);
+        if ($post !== null) {
+            return iterator_to_array($post['images']);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Delete Images from Storage
+     */
+    public function deleteImage(array $data)
+    {
+        try {
+            foreach ($data['images'] as $image) {
+                $image_path = $this->storage_path . $image;
+                if (file_exists($image_path)) {
+                    if (unlink($image_path)) {
+                        continue;
+                    } else {
+                        throw new Exception('Cannot remove image: ' . $image_path);
+                    }
+                }
+            }
+            return true;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 }
