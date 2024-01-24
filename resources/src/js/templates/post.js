@@ -70,37 +70,45 @@ $('.btn-download').on('click', function () {
             responseType: 'arraybuffer'
         },
         success: function (data, textStatus, xhr) {
-            // Check the content type
             var contentType = xhr.getResponseHeader('Content-Type');
-
-            // Create a Blob from the array buffer
             var blob = new Blob([data], { type: contentType });
-
-            // Create a temporary URL for the blob
             var tempURL = window.URL.createObjectURL(blob);
-
-            // Set attributes for download
             $(this).attr('href', tempURL);
-
-            // Extract filename from the Content-Disposition header
             var contentDisposition = xhr.getResponseHeader('Content-Disposition');
             var filename = contentDisposition.match(/filename="?([^"]+)"?/);
             filename = filename ? filename[1] : 'images.zip';
-
-            // Set download attribute with the filename
             $(this).attr('download', filename);
-
-            // Trigger a click event to initiate the download
             $(this).get(0).click();
-
-            // Revoke the temporary URL
             window.URL.revokeObjectURL(tempURL);
-
-            // Remove the 'href' attribute
             $(this).removeAttr('href');
         }.bind(this),
         error: function (error) {
             showToast("Photogram", "Just Now", "Cannot download the post!");
         }
     });
+});
+
+// Copy the post link
+$('.btn-copy-link').on('click', function () {
+    let successAudio = $('<audio>', {
+        id: 'successTone',
+        src: '/assets/sounds/success.mp3'
+    });
+    if ($('#successTone').length === 0) {
+        $('body').append(successAudio);
+    }
+    let carousel = $(this).parents('header').next();
+    let activeItem = carousel.find('.active');
+    let image = activeItem.find('img').attr('src');
+    let textToCopy = window.location.origin + (this.getAttribute('value') != undefined ? $(this).attr('value') : image);
+
+    if (navigator.clipboard) {
+        if (navigator.clipboard.writeText(textToCopy)) {
+            successAudio[0].play();
+            showToast("Photogram", "Just Now", "Copied the post link to the clipboard!");
+        }
+    } else {
+        console.error("Can't copy the post link!");
+        showToast("Photogram", "Just Now", "Can't copy the post link to the clipboard!");
+    }
 });
