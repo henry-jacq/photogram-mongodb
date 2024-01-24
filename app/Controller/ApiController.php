@@ -145,6 +145,16 @@ class ApiController
         return false;
     }
 
+    /**
+     * Get redirect URL
+     */
+    public function getRedirect()
+    {
+        $redirect = $this->session->get('_redirect', '/home');
+        $this->session->forget('_redirect');
+        return $redirect;
+    }
+
     private function packData(array $data, string $contentType)
     {
         switch ($contentType) {

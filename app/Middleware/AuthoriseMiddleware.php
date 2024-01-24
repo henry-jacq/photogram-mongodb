@@ -2,6 +2,8 @@
 
 namespace App\Middleware;
 
+use App\Core\Request;
+use App\Core\Session;
 use App\Model\User;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -13,6 +15,8 @@ class AuthoriseMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly User $user,
+        private readonly Session $session,
+        private readonly Request $requestService,
         private readonly ResponseFactoryInterface $responseFactory
     )
     {
@@ -21,6 +25,9 @@ class AuthoriseMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (empty($_SESSION['user'])) {
+            if ($request->getMethod() === 'GET' && !$this->requestService->isXhr($request)) {
+                $this->session->put('_redirect', (string) $request->getUri());
+            }
             return $this->responseFactory
                 ->createResponse(302)
                 ->withHeader('Location', '/login');
