@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="container mt-5">
-        <div class="row mx-2 mb-2">
+        <div class="row ms-2 me-1 mb-2">
             <div class="col-md-7">
                 <h5 class="m-0"><?= ucfirst($profileUser['fullname']) ?> </h5>
                 <p class="mb-2">@<?= $profileUser['username'] ?> <span class="small mb-2"> • App Developer</span></p>
@@ -29,7 +29,7 @@
             <div class="col-md-5 mb-2 px-1">
                 <div class="hstack gap-3 gap-xl-3 float-md-end">
                     <div class="text-center px-2">
-                        <h6 class="mb-0">0</h6>
+                        <h6 class="mb-0"><?= count($posts); ?></h6>
                         <small>Posts</small>
                     </div>
                     <div class="vr"></div>
@@ -56,14 +56,17 @@
         <hr class="mt-2 mb-3">
         <div class="user-posts-section mb-5">
             <?php
-            if ($posts !== false) {
-                $this->renderComponent('card', [
-                    'posts' => $posts,
-                    'user' => $user,
-                    'name' => $name,
-                    'profileUser' => $profileUser
-                ]);
-            } else if ($title !== 'Home') {?>
+            if ($posts !== false && count($posts) > 0) { ?>
+                <div class="row g-3" id="masonry-area">
+                    <?php
+                    foreach ($posts as $post) :
+                        $this->renderComponent('card', [
+                            'p' => $post,
+                            'user' => $user
+                        ]);
+                    endforeach; ?>
+                </div>
+            <?php } else if ($title !== 'Home') { ?>
                 <div class="text-center py-5">
                     <i class="bi bi-plus-circle display-4 mb-4"></i>
                     <p class="text-muted text-center align-items-center mb-0 ">No posts yet!</p>

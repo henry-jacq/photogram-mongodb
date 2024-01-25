@@ -12,10 +12,21 @@
             </div>
         </div>
         <hr class="m-0 py-2">
-        <?php        
-        $this->renderComponent('card', [
-            'posts' => $posts,
-            'user' => $user
-        ]); ?>
+        <?php if ($posts !== false && count($posts) > 0) : ?>
+            <div class="row g-3" id="masonry-area">
+                <?php
+                foreach ($posts as $post) :
+                    $this->renderComponent('card', [
+                        'p' => $post,
+                        'user' => $user
+                    ]);
+                endforeach; ?>
+            </div>
+        <?php else : ?>
+            <div class="text-center py-5">
+                <i class="bi bi-plus-circle display-4 mb-4"></i>
+                <p class="text-muted text-center align-items-center mb-0 ">Posts not available!</p>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

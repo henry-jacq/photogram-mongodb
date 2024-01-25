@@ -70,7 +70,7 @@ class View implements ViewInterface
         $path = VIEW_PATH . '/components/' . $component;
 
         if (file_exists($path)) {
-            include_once $path;
+            include $path;
         } else {
             return false;
         }
