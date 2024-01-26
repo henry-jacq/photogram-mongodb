@@ -112,3 +112,116 @@ $('.btn-copy-link').on('click', function () {
         showToast("Photogram", "Just Now", "Can't copy the post link to the clipboard!");
     }
 });
+
+// Show post image preview in modal
+$('.btn-full-preview').on('click', function () {
+    var clone_element = $(this).parents('header').next();
+    var d = new Dialog('<i class="fa-solid fa-expand me-2 small"></i>Full Preview', '', 'xlarge');
+    var modal = d.clone;
+    var target = modal.find('.modal-body');
+
+    $(modal).on({
+        // Disable right-click on Images
+        contextmenu: function () {
+            return false;
+        },
+        // Disable Image Dragging
+        dragstart: function (e) {
+            e.preventDefault();
+        }
+    });
+
+    modal.find('.modal-body').addClass('p-0');
+    modal.find('.modal-header').addClass('border-0 px-3 py-1');
+    modal.find('.modal-title').addClass('fs-6 fw-normal');
+    modal.find('.modal-footer').remove();
+    d.show('', true);
+
+    if (clone_element.hasClass('carousel')) {
+        clone_element.clone().appendTo(target);
+        carousel_sel = 'post-image-full-preview';
+        target.find('.carousel').attr('id', carousel_sel);
+        target.find('.carousel-item > img').removeClass('post-img');
+        target.find('.carousel-inner').addClass('rounded');
+        target.find('.carousel-control-prev').attr('data-bs-target', '#' + carousel_sel);
+        target.find('.carousel-control-next').attr('data-bs-target', '#' + carousel_sel);
+    } else if (clone_element.hasClass('post-card-image')) {
+        var wrapper = $('<div>').addClass('d-flex align-items-center justify-content-center').html(clone_element.clone());
+        wrapper.appendTo(target);
+        target.find('.post-card-image').removeClass('post-img');
+        target.find('.post-card-image').addClass('img-fluid');
+    } else {
+        console.error('Cannot preview post image.');
+    }
+})
+
+// Edit post text
+$('.btn-edit-post').on('click', function () {
+    var successAudio = $('<audio>', {
+        id: 'successTone',
+        src: '/assets/success.mp3'
+    });
+    if ($('#successTone').length === 0) {
+        $('body').append(successAudio);
+    }
+    const pid = $(this).parent().attr('data-id');
+    let el = $(this).parents('header').next().next();
+    let ptext = el.find('.post-text').text();
+    const message = `<div class="container my-3"><p class="form-label">Change post text:</p><textarea class="form-control post-text" name="post_text" rows="5" placeholder="Say something..." spellcheck="false">${el.find('.post-text').html().replace(/<br\s*\/?>/ig, '')}</textarea><p class="total-chars visually-hidden text-end mt-2"></p></div>`;
+    let d = new Dialog('<i class="bi bi-pencil me-2"></i>Edit Your Post', message);
+    d.setButtons([
+        {
+            'name': "Cancel",
+            "class": "btn-secondary",
+            "onClick": function (event) {
+                $(event.data.modal).modal('hide')
+            }
+        },
+        {
+            'name': "Update post",
+            "class": "btn-prime btn-update-post",
+            "onClick": function (event) {
+                let ptxt = $(d.clone).find('.post-text').val();
+                $(d.clone).find('.btn-update-post').prop('disabled', true);
+
+                $.post('/api/posts/update',
+                    {
+                        id: pid,
+                        text: ptxt
+                    }, function (data, textSuccess) {
+                        if (textSuccess == "success") {
+                            successAudio[0].play();
+                            el.find('.post-text').css('white-space', 'pre-line');
+                            el.find('.post-text').html(ptxt.replace(/<br\s*\/?>/ig, '<br>'));
+                            masonry.layout();
+                            showToast("Photogram", "Just Now", "Post text changed successfully!");
+                        } else {
+                            showToast("Photogram", "Just Now", "Can't change the post text!");
+                        }
+                    });
+                $(event.data.modal).modal('hide');
+            }
+        }
+    ]);
+    d.show();
+    let txtarea = $(d.clone).find('.post-text');
+    $(d.clone).find('.btn-update-post').prop('disabled', true);
+    $(txtarea).on('input', function () {
+        if (txtarea.val() != ptext) {
+            $(d.clone).find('.btn-update-post').prop('disabled', false);
+        } else {
+            $(d.clone).find('.btn-update-post').prop('disabled', true);
+        }
+        // Character limit on post text
+        const maxLength = 240;
+        const charCount = $('.total-chars');
+        const length = $(this).val().length;
+        charCount.removeClass('visually-hidden');
+
+        if (length > maxLength) {
+            const truncatedValue = $(this).val().slice(0, maxLength);
+            $(this).val(truncatedValue);
+        }
+        charCount.text(`${$(this).val().length}/${maxLength}`);
+    });
+});
