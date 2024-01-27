@@ -44,11 +44,12 @@ Install Grunt and Sass:
 npm install -g grunt-cli sass
 ```
 
-Install php-gd extension:
-- This extension is used for image processing
+Install php-gd and php-zup extension:
+- php-gd is used for image processing
+- php-zip is used for zipping files
 
 ```bash
-sudo apt-get install php-gd php-mongodb
+sudo apt-get install php-gd php-zip php-mongodb certbot python3-certbot-apache
 ```
 
 Uncomment the gd extension in php.ini config:
@@ -70,6 +71,13 @@ sudo a2enmod rewrite
 sudo a2enmod actions
 sudo a2enmod expires
 sudo a2enmod deflate
+sudo a2enmod socache_shmcb
+sudo a2enmod ssl
+```
+
+Generate SSL certificate
+```bash
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/photogram.key -out /etc/ssl/certs/photogram.crt
 ```
 
 Add apache vhost:
@@ -79,6 +87,7 @@ sudo touch /etc/apache2/sites-available/photogram.conf
 - Then paste the following snippet into photogram.conf
 
 - Replace the path with your project's path
+- Photogram HTTP Vhost Config
 ```apache
 <VirtualHost *:80>
     ServerAdmin webmaster@localhost
@@ -105,8 +114,53 @@ sudo touch /etc/apache2/sites-available/photogram.conf
 
     ServerSignature Off
 
-    LimitRequestBody 1024000
-    
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+- Photogram HTTPS Vhost Config
+```apache
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /home/user/htdocs/photogram/public
+    ServerName photogram.local
+
+    <Directory /home/user/htdocs/photogram/public/>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/photogram.crt
+    SSLCertificateKeyFile /etc/ssl/private/photogram.key
+
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+
+    BrowserMatch "MSIE [2-6]" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
+    BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+
+    <IfModule mod_deflate.c>
+        AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json application/xml image/svg+xml
+    </IfModule>
+
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType image/jpg "access plus 1 year"
+        ExpiresByType image/jpeg "access plus 1 year"
+        ExpiresByType image/png "access plus 1 year"
+        ExpiresByType image/gif "access plus 1 year"
+    </IfModule>
+
+    ServerSignature Off
+
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
