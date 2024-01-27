@@ -32,5 +32,26 @@ $custom-theme-colors: (
 
 $theme-colors: map-merge($custom-theme-colors, $theme-colors);
 
+/* Define custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--bs-body-bg);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--bs-tertiary-color);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-tertiary-color);
+}
+
 // Import Bootstrap
 @import '../../../node_modules/bootstrap/scss/bootstrap';
