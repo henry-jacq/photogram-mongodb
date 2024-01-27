@@ -51,7 +51,7 @@
                                 </a>
                             </li>
                             <li data-id="<?= $p['_id'] ?>">
-                                <a class="dropdown-item btn-edit-post" role="button">
+                                <a class="dropdown-item btn-toggle-comment" role="button">
                                     <i class="fa-solid fa-comment-slash fa-sm" aria-hidden="true"></i>
                                     <span class="ms-2">Turn off comment</span>
                                 </a>
@@ -67,7 +67,7 @@
                             </li>
                         <?php else : ?>
                             <li>
-                                <a class="dropdown-item btn btn-delete text-danger" role="button">
+                                <a class="dropdown-item btn btn-report text-danger" role="button">
                                     <i class="fa-solid fa-exclamation-circle fa-sm" aria-hidden="true"></i>
                                     <span class="ms-2">Report post</span>
                                 </a>
