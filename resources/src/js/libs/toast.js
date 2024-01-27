@@ -54,15 +54,15 @@ class Toast {
         this.id = "toast_" + CryptoJS.MD5(Math.random() + "").toString();
 
         this.placement_vals = {
-            "top-left": "top-0 start-0",
+            "top-left": "top-0 start-0 m-2",
             "top-center": "top-0 start-50 translate-middle-x",
-            "top-right": "top-0 end-0",
+            "top-right": "top-0 end-0 m-2",
             "middle-left": "top-50 start-0 translate-middle-y",
             "middle-center": "top-50 start-50 translate-middle",
             "middle-right": "top-50 end-0 translate-middle-y",
-            "bottom-left": "bottom-0 start-0",
+            "bottom-left": "bottom-0 start-0 m-2",
             "bottom-center": "bottom-0 start-50 translate-middle-x",
-            "bottom-right": "bottom-0 end-0"
+            "bottom-right": "bottom-0 end-0 m-2"
         }
 
         this.domInit()
@@ -87,10 +87,10 @@ class Toast {
         var toast_template = `
         <div class="toast fade mb-4 me-4" id="${this.id}" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header bg-opacity-50">
-                <img src="/assets/brand/favicon.ico" class="me-2" alt="..." width="23" height="25">
+                <img src="/assets/brand/favicon.ico" class="me-2" alt="..." width="20" height="25">
                 <strong class="fw-semibold me-auto">${this.title}</strong>
                 <small class="text-muted">${this.subtitle}</small>
-                <button type="button" class="btn-close shadow-none" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-sm shadow-none" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
                 ${this.message}
