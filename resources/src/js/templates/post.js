@@ -191,27 +191,26 @@ $('.btn-edit-post').on('click', function () {
                 let ptxt = $(d.clone).find('.post-text').val();
                 $(d.clone).find('.btn-update-post').prop('disabled', true);
 
-                var postData = {
-                    'id': pid,
-                    'text': ptxt
-                }
-
                 $.ajax({
                     url: '/api/posts/update',
                     type: 'POST',
-                    data: postData,
-                    cache: false,
-                    contentType: 'application/json',
-                    processData: false,
-                    success: function (response) {
-                        successAudio[0].play();
-                        el.find('.post-text').css('white-space', 'pre-line');
-                        el.find('.post-text').html(ptxt.replace(/<br\s*\/?>/ig, '<br>'));
-                        masonry.layout();
-                        showToast("Photogram", "Just Now", "Post text changed successfully!");
+                    data: {
+                        id: pid,
+                        text: ptxt
+                    },
+                    success: function (data, textStatus) {
+                        if (textStatus == "success") {
+                            successAudio[0].play();
+                            el.find('.post-text').css('white-space', 'pre-line');
+                            el.find('.post-text').html(ptxt.replace(/<br\s*\/?>/ig, '<br>'));
+                            masonry.layout();
+                            showToast("Photogram", "Just Now", "Post text changed successfully!");
+                        } else {
+                            showToast("Photogram", "Just Now", "Can't change the post text!");
+                        }
                     },
                     error: function (xhr, status, error) {
-                        showToast("Photogram", "Just Now", "Can't change the post text!");
+                        showToast("Photogram", "Just Now", "Can't change the post text: " + xhr.responseText);
                     }
                 });
                 $(event.data.modal).modal('hide');
