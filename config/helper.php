@@ -74,3 +74,9 @@ function dump($var)
         highlight_string("<?php\n" . var_export($var, true));
     }
 }
+
+function hashtag(string $text)
+{
+    $filteredText = preg_replace('/#(\w+)/', '<a href="/discover/tags/$1">#$1</a>', $text);
+    return $filteredText;
+}

@@ -174,7 +174,12 @@ $('.btn-edit-post').on('click', function () {
     const pid = $(this).parent().attr('data-id');
     let el = $(this).parents('header').next().next();
     let ptext = el.find('.post-text').text();
-    const message = `<div class="container my-3"><p class="form-label">Change post text:</p><textarea class="form-control post-text" name="post_text" rows="5" placeholder="Say something..." spellcheck="false">${el.find('.post-text').html().replace(/<br\s*\/?>/ig, '')}</textarea><p class="total-chars visually-hidden text-end mt-2"></p></div>`;
+    let actText = el.find('.post-text').html().replace(/<br\s*\/?>/ig, '');
+    
+    // Remove HTML tags
+    var textWithoutHtml = actText.replace(/<[^>]+>/g, '');
+    
+    const message = `<div class="container my-3"><p class="form-label">Change post text:</p><textarea class="form-control post-text" name="post_text" rows="5" placeholder="Say something..." spellcheck="false">${textWithoutHtml}</textarea><p class="total-chars visually-hidden text-end mt-2"></p></div>`;
     let d = new Dialog('<i class="bi bi-pencil me-2"></i>Edit Your Post', message);
     d.setButtons([
         {
@@ -188,7 +193,8 @@ $('.btn-edit-post').on('click', function () {
             'name': "Update post",
             "class": "btn-prime btn-update-post",
             "onClick": function (event) {
-                let ptxt = $(d.clone).find('.post-text').val();
+                let txt = $(d.clone).find('.post-text').val();
+                let ptxt = txt.replace(/#(\w+)/g, '<a href="/discover/tags/$1">#$1</a>');
                 $(d.clone).find('.btn-update-post').prop('disabled', true);
 
                 $.ajax({
