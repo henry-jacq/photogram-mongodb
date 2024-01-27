@@ -3,9 +3,17 @@
 ${basename(__FILE__, '.php')} = function () {
     if ($this->isAuthenticated() && $this->isMethod('POST')) {
         if ($this->paramsExists(['id', 'text'])) {
-
+            
             $pid = $this->data['id'];
-            $text = $this->data['text'];
+            $pdata = $this->post->getPostById($pid);
+
+            if ($pdata['user_id'] !== $_SESSION['user']) {
+                return $this->response([
+                    'message' => 'Not Modified'
+                ], 304);
+            }
+            
+            $text = htmlspecialchars($this->data['text']);
             
             $result = $this->post->updatePostText($pid, $text);
             

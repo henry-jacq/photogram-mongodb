@@ -3,7 +3,18 @@
 ${basename(__FILE__, '.php')} = function () {
     if ($this->isAuthenticated() && $this->isMethod('POST')) {
         if ($this->paramsExists(['id'])) {
-            $result = $this->post->deletePost($this->data['id']);
+            
+            $pid = $this->data['id'];
+            $pdata = $this->post->getPostById($pid);
+
+            if ($pdata['user_id'] !== $_SESSION['user']) {
+                return $this->response([
+                    'message' => 'Unauthorized'
+                ], 401);
+            }
+            
+            $result = $this->post->deletePost($pid);
+            
             return $this->response([
                 'message' => $result
             ], 200);

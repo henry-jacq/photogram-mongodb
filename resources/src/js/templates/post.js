@@ -32,12 +32,15 @@ $('.btn-delete').on('click', function () {
             'name': "Delete post",
             "class": "btn-danger",
             "onClick": function (event) {
-                $.post('/api/posts/delete',
-                    {
+                $.ajax({
+                    url: '/api/posts/delete',
+                    type: 'POST',
+                    data: {
                         id: post_id
-                    }, function (data, textSuccess) {
-                        if (textSuccess == "success") {
-                            sl = document.querySelector(`#post-${post_id}`);
+                    },
+                    success: function (data, textStatus) {
+                        if (textStatus === "success") {
+                            var sl = document.querySelector(`#post-${post_id}`);
                             masonry.remove(sl);
                             masonry.layout();
                             successAudio[0].play();
@@ -45,8 +48,12 @@ $('.btn-delete').on('click', function () {
                         } else {
                             showToast("Photogram", "Just Now", "Can't delete your post!");
                         }
-                    });
-
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // console.error("Error deleting post:", errorThrown);
+                        showToast("Photogram", "Just Now", "Can't delete your post!");
+                    }
+                });
                 $(event.data.modal).modal('hide')
             }
         }
@@ -159,7 +166,7 @@ $('.btn-full-preview').on('click', function () {
 $('.btn-edit-post').on('click', function () {
     var successAudio = $('<audio>', {
         id: 'successTone',
-        src: '/assets/success.mp3'
+        src: '/assets/sounds/success.mp3'
     });
     if ($('#successTone').length === 0) {
         $('body').append(successAudio);
@@ -184,21 +191,29 @@ $('.btn-edit-post').on('click', function () {
                 let ptxt = $(d.clone).find('.post-text').val();
                 $(d.clone).find('.btn-update-post').prop('disabled', true);
 
-                $.post('/api/posts/update',
-                    {
-                        id: pid,
-                        text: ptxt
-                    }, function (data, textSuccess) {
-                        if (textSuccess == "success") {
-                            successAudio[0].play();
-                            el.find('.post-text').css('white-space', 'pre-line');
-                            el.find('.post-text').html(ptxt.replace(/<br\s*\/?>/ig, '<br>'));
-                            masonry.layout();
-                            showToast("Photogram", "Just Now", "Post text changed successfully!");
-                        } else {
-                            showToast("Photogram", "Just Now", "Can't change the post text!");
-                        }
-                    });
+                var postData = {
+                    'id': pid,
+                    'text': ptxt
+                }
+
+                $.ajax({
+                    url: '/api/posts/update',
+                    type: 'POST',
+                    data: postData,
+                    cache: false,
+                    contentType: 'application/json',
+                    processData: false,
+                    success: function (response) {
+                        successAudio[0].play();
+                        el.find('.post-text').css('white-space', 'pre-line');
+                        el.find('.post-text').html(ptxt.replace(/<br\s*\/?>/ig, '<br>'));
+                        masonry.layout();
+                        showToast("Photogram", "Just Now", "Post text changed successfully!");
+                    },
+                    error: function (xhr, status, error) {
+                        showToast("Photogram", "Just Now", "Can't change the post text!");
+                    }
+                });
                 $(event.data.modal).modal('hide');
             }
         }
