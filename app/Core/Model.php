@@ -76,7 +76,7 @@ class Model
     // Update operation
     public function update($id, $data, $index = '_id')
     {
-        $this->collection->updateOne([
+        return $this->collection->updateOne([
             $index => $this->createMongoId($id)
         ], ['$set' => $data]);
     }
