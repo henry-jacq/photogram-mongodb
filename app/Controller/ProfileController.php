@@ -38,7 +38,7 @@ class ProfileController extends Controller
             return $this->render($response, 'user/profile', $args);
         }
         
-        return $this->renderErrorPage($response);
+        return $this->renderErrorPage($response, ['code' => 404, 'title' => 'Not Found']);
     }
 
     public function edit(Request $request, Response $response): Response

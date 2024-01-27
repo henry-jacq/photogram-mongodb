@@ -24,7 +24,7 @@ class AuthController extends Controller
         $args = [
             'title' => 'Share Memories'
         ];
-        return $this->render($response, 'auth/landing', $args, false, false);
+        return $this->render($response, 'auth/landing', $args, false, true);
     }
 
     public function onboardView(Request $request, Response $response): Response

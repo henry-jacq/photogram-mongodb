@@ -12,17 +12,17 @@ class Controller
     {
     }
 
-    public function renderErrorPage(Response $response)
+    public function renderErrorPage(Response $response, $params = [])
     {
         $response->getBody()->write(
             (string) $this->view
-                ->createPage('error', ['code' => 404], false)
+                ->createPage('error', $params)
                 ->render()
         );
-        return $response->withStatus(404);
+        return $response->withStatus($params['code']);
     }
     
-    public function render(Response $response, string $viewPath, array $args, $header = true, $footer = true)
+    public function render(Response $response, string $viewPath, array $args, $header = true, $footer = false)
     {
         $args['header'] = $header;
         $args['footer'] = $footer;
