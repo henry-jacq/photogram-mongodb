@@ -1,7 +1,7 @@
 <div class="h-100 d-flex align-items-center justify-content-center row min-vh-100 user-select-none">
     <div class="py-3 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
         <form class="user-register-form needs-validation" method="post" autocomplete="off">
-            <div class="form-control p-4 bg-black bg-opacity-25">
+            <div class="form-control p-4 shadow-lg bg-opacity-25">
                 <img src="/assets/brand/photogram-logo.png" alt="logo" class="img-fluid mx-auto d-block mb-2" width="63" height="63">
                 <h4 class="fw-light text-center mb-4">Photogram</h4>
                 <hr class="mb-3">
