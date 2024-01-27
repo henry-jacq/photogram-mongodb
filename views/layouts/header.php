@@ -50,11 +50,22 @@
                                 </svg>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-md-end">
-                                <li><a class="dropdown-item" href="/profile/<?= $user['username']?>"><i class="bi bi-person-circle me-2"></i>My Profile</a></li>
-                                <li><a class="dropdown-item" href="/profile/edit"><i class="bi bi-pencil me-2"></i>Edit Profile</a></li>
-                                <li><a class="dropdown-item" href="/settings/account"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="/profile/<?= $user['username']?>"><i class="bi bi-person-circle me-2"></i>My Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/profile/edit"><i class="bi bi-pencil me-2"></i>Edit Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/settings/account"><i class="bi bi-gear me-2"></i>Settings</a>
+                                </li>
+                                <li class="">
+                                    <a role="button" class="dropdown-item bg-body-tertiary text-warning" onclick="dialog('Not Implemented!',' This feature is not implemented');"><i class="bi bi-star me-2"></i>Upgrade to Pro!</a>
+                                </li>
                                 <li class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left me-2"></i>Sign Out</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-left me-2"></i>Sign Out</a>
+                                </li>
                                 <li class="dropdown-divider"></li>
                                 <li>
                                     <div class="d-flex justify-content-center gap-2 align-items-center px-2 py-0">
