@@ -24,7 +24,7 @@ class Post extends Model
     /**
      * Get user posts by user ID
      */
-    public function getPostsById(string|object $user_id)
+    public function getUserPosts(string $user_id)
     {
         $cursor = $this->findById($user_id, 'user_id', false, true);
 
@@ -74,6 +74,15 @@ class Post extends Model
         }
 
         return $formattedPosts;
+    }
+
+    /**
+     * Get post by its ID
+     */
+    public function getPostById(string $pid)
+    {
+        $result = $this->findById($pid);
+        return $result;
     }
 
     /**
@@ -190,6 +199,10 @@ class Post extends Model
 
     public function updatePostText(string $id, string $text)
     {
+        if (!empty($text) && strlen($text) >= 240) {
+            return false;
+        }
+        
         $data = ['caption' => $text];
 
         $this->update($id, $data);

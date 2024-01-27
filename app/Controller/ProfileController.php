@@ -33,7 +33,7 @@ class ProfileController extends Controller
                 'user' => $userData,
                 'profileUser' => $profile,
                 'title' => ucfirst($name) . "'s Profile",
-                'posts' => $this->post->getPostsById($profile['_id'])
+                'posts' => $this->post->getUserPosts($profile['_id'])
             ];
             return $this->render($response, 'user/profile', $args);
         }
