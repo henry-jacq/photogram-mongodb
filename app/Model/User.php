@@ -20,6 +20,18 @@ class User extends Model
         $this->update($userId, $userData);
     }
 
+    public function updatePreferences($id, string $arrayKey, array $newKeyValue)
+    {
+        $data = [
+            '$push' => [
+                $arrayKey => [
+                    '$each' => [$newKeyValue]
+                ]
+            ]
+        ];
+        return $this->update($id, $data);
+    }
+
     /**
      * Check by username or email
      */
