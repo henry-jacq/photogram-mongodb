@@ -105,26 +105,10 @@ class Post extends Model
         return $userData;
     }
 
-    public function handleImages(array $data)
-    {
-        $output = array();
-
-        foreach ($data as $key => $values) {
-            for ($i = 0; $i < count($values); $i++) {
-                $output[$i][$key] = $values[$i];
-            }
-        }
-
-        return $output;
-    }
-
     public function createPost(array $data)
     {
-        $images = $this->handleImages($data['images']);
-        $url = [];
-
-        foreach ($images as $image) {
-            $path = $this->storeImage($image['tmp_name']);
+        foreach ($data['images'] as $image) {
+            $path = $this->storeImage($image);
             $url[] = $path;
         }
 

@@ -1,11 +1,21 @@
 <?php
 
 ${basename(__FILE__, '.php')} = function () {  
+    if (isset($this->files['file'][0]) && !empty($this->files['file'][0])) {
+        $files = $this->files['file'];
+        
+        $paths = [];
+        if (count($files) > 1) {
+            foreach ($files as $file) {
+                $paths[] = $file->getFilePath();
+            }
+        } else {
+            $paths[] = $files[0]->getFilePath();
+        }
 
-    if (isset($this->files['file']) && !empty($this->files['file'])) {
         $data = [
+            'images' => $paths,
             'user_id' => $_SESSION['user'],
-            'images' => $this->files['file'],
             'text' => $this->data['post_text'],
         ];
         

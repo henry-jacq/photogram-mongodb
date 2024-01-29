@@ -50,7 +50,7 @@ class ApiController
      */
     public function process(Request $request, Response $response): Response
     {
-        $this->files = $_FILES;
+        $this->files = $request->getUploadedFiles();
         $this->slimRequest = $request;
         $this->slimResponse = $response;
         $this->params = $request->getServerParams();
