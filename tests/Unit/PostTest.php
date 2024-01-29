@@ -21,7 +21,7 @@ class PostTest extends TestCase
         $this->db = MongoDB::getInstance($client, 'photogram');
 
         // Set the collection to be used in tests
-        $this->setCollection($this->collectionName);
+        $this->db->selectCollection($this->collectionName);
     }
 
     public function tearDown(): void
@@ -32,16 +32,11 @@ class PostTest extends TestCase
 
         parent::tearDown(); // Always call parent tearDown() method
     }
-
-    public function setCollection($collection)
-    {
-        $this->db->selectCollection($collection);
-    }
     
     public function test_get_all_posts()
     {
         // Your test logic here
-        var_dump($this->db->getCollection());
+        var_dump($this->db->);
 
         // Add assertions to verify the correctness of your test
         // For example:
