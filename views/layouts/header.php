@@ -15,12 +15,12 @@
                     <ul class="navbar-nav gap-md-3">
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/home">
-                                <i class="bi bi-house-door<?php if ($title == 'Home'): echo('-fill'); endif; ?> fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Home"></i><span class="d-md-none ms-2">Home</span>
+                                <i class="bi bi-house-door<?php if ($title == 'Home'): echo('-fill'); endif; ?> fs-5" <?php if ($title != 'Home'): echo('data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Home"'); endif; ?>></i><span class="d-md-none ms-2">Home</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="/discover">
-                                <i class="bi bi-compass<?php if ($title == 'Discover'): echo('-fill'); endif; ?> fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Discover"></i><span class="d-md-none ms-2">Discover</span>
+                                <i class="bi bi-compass<?php if ($title == 'Discover'): echo('-fill'); endif; ?> fs-5" <?php if ($title != 'Discover'): echo('data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Discover"'); endif; ?> ></i><span class="d-md-none ms-2">Discover</span>
                             </a>
                         </li>
                         <li class="nav-item">
