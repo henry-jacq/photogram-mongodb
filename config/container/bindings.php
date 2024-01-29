@@ -1,7 +1,6 @@
 <?php
 
 use Slim\App;
-use ZipArchive;
 use App\Core\Auth;
 use App\Core\View;
 use App\Model\Post;
