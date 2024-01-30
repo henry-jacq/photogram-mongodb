@@ -3,7 +3,7 @@
         <div class="col-12 col-md-7 col-lg-6 mt-3 mb-5">
             <form class="text-body position-relative ms-auto my-md-0 my-sm-3" role="search">
                 <div class="input-group mb-3">
-                    <input class="form-control shadow pe-md-5" type="search" name="search" placeholder="Search" aria-label="Search" aria-describedby="search-blogs">
+                    <input class="form-control shadow" type="search" name="search" placeholder="Search" aria-label="Search" aria-describedby="search-blogs">
                     <span class="input-group-text px-3" id="icon-click" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Search">
                         <i class="bi-search" id="icon"></i>
                     </span>
