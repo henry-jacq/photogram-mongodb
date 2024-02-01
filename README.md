@@ -192,6 +192,7 @@ mkdir -p storage/posts/ storage/avatars/
 
 sudo chown -R www-data:www-data storage/
 sudo chmod -R 755 storage/
+sudo usermod -aG <username> www-data 
 ```
 
 
