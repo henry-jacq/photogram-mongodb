@@ -6,7 +6,7 @@ ${basename(__FILE__, '.php')} = function () {
 
             $theme = $this->data['value'];
             $data = [
-                'id' => $_SESSION['user'],
+                'id' => $this->getUserId(),
                 'theme' => $theme
             ];
 

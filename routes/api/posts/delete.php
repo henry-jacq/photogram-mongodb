@@ -7,7 +7,7 @@ ${basename(__FILE__, '.php')} = function () {
             $pid = $this->data['id'];
             $pdata = $this->post->getPostById($pid);
 
-            if ($pdata['user_id'] !== $_SESSION['user']) {
+            if ($pdata['user_id'] !== $this->getUserId()) {
                 return $this->response([
                     'message' => 'Unauthorized'
                 ], 401);

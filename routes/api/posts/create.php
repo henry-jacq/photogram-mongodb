@@ -15,7 +15,7 @@ ${basename(__FILE__, '.php')} = function () {
 
         $data = [
             'images' => $paths,
-            'user_id' => $_SESSION['user'],
+            'user_id' => $this->getUserId(),
             'text' => $this->data['post_text'],
         ];
         
