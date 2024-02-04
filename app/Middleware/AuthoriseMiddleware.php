@@ -27,10 +27,10 @@ class AuthoriseMiddleware implements MiddlewareInterface
         if (empty($_SESSION['user'])) {
             if ($request->getMethod() === 'GET' && !$this->requestService->isXhr($request)) {
                 $this->session->put('_redirect', (string) $request->getUri());
+                return $this->responseFactory
+                    ->createResponse(302)
+                    ->withHeader('Location', '/login');
             }
-            return $this->responseFactory
-                ->createResponse(302)
-                ->withHeader('Location', '/login');
         } else {
             $user = $this->user->getUser();
             $request = $request->withAttribute('userData', $user);

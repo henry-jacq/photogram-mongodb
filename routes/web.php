@@ -36,5 +36,5 @@ return function (App $app) {
     // API Routes
     $app->group('/api', function (RouteCollectorProxy $group) {
         $group->any('/{namespace}/{resource}', [ApiController::class, 'process']);
-    });
+    })->add(AuthoriseMiddleware::class);
 };
