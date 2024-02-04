@@ -43,7 +43,8 @@ class Auth implements AuthInterface
             'fullname' => $fullname,
             'username' => $username,
             'email' => $email,
-            'password' => $password
+            'password' => $password,
+            'preferences' => []
         ];
 
         try {

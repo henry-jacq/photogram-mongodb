@@ -63,6 +63,28 @@ class User extends Model
         return $this->findOne($data);
     }
 
+    // Switch user theme
+    public function setTheme(array $data)
+    {
+        $id = $this->createMongoId($data['id']);
+        $theme = $data['theme'];
+
+        try {
+            $result = $this->collection->updateOne(
+                ['_id' => $id],
+                ['$set' => ['preferences' => [['theme' => $theme]]]]
+            );
+
+            if ($result->getModifiedCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function validateEmail(string $email)
     {
         return filterEmail($email);

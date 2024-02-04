@@ -1,8 +1,10 @@
 (() => {
     'use strict'
 
-    const getStoredTheme = () => localStorage.getItem('theme')
-    const setStoredTheme = theme => localStorage.setItem('theme', theme)
+    const getStoredTheme = () => {
+        const theme = document.documentElement.getAttribute('data-bs-theme');
+        return theme;
+    }
 
     const getPreferredTheme = () => {
         const storedTheme = getStoredTheme()
@@ -21,7 +23,14 @@
         }
     }
 
-    setTheme(getPreferredTheme())
+    const saveTheme = theme => {
+        var xhttp = new XMLHttpRequest()
+
+        xhttp.open('GET', '/api/users/theme?value=' + theme, true);
+        xhttp.send()
+    }
+    
+    // setTheme(getPreferredTheme())
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         const storedTheme = getStoredTheme()
@@ -36,10 +45,9 @@
         toggleButtons.forEach(toggle => {
             toggle.addEventListener('click', () => {
                 const theme = toggle.getAttribute('data-bs-theme-value');
-                setStoredTheme(theme);
                 setTheme(theme);
+                saveTheme(theme);
 
-                // Add btn-prime class to the clicked button and remove from others
                 toggleButtons.forEach(btn => {
                     if (btn === toggle) {
                         btn.classList.add('btn-prime');
@@ -48,10 +56,6 @@
                     }
                 });
             });
-            var theme = toggle.getAttribute('data-bs-theme-value');
-            if (theme == getPreferredTheme()) {
-                toggle.classList.add('btn-prime')
-            }
         });
     });
 })()

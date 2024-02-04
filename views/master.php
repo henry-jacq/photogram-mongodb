@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<?php
+$theme = $params['user']['preferences'][0]['theme'] ?? 'dark';
+
+?>
+
+<html lang="en" data-bs-theme="<?php echo($theme); ?>">
 
 <?php echo ($this->renderLayout('head', $params)); ?>
 

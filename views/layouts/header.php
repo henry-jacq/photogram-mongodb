@@ -70,10 +70,13 @@
                                 <li>
                                     <div class="d-flex justify-content-center gap-2 align-items-center px-2 py-0">
                                         <span class="user-select-none">Mode:</span>
-                                        <button type="button" class="btn border" data-bs-theme-value="light">
+                                        <?php 
+                                        $theme = $user->preferences[0]->theme ?? 'dark';
+                                        ?>
+                                        <button type="button" class="btn border <?php if($theme=='light'): echo('btn-prime'); endif;?>" data-bs-theme-value="light">
                                             <i class="bi bi-sun fs-5"></i>
                                         </button>
-                                        <button type="button" class="btn border" data-bs-theme-value="dark">
+                                        <button type="button" class="btn border <?php if($theme=='dark'): echo('btn-prime'); endif;?>" data-bs-theme-value="dark">
                                             <i class="bi bi-moon-stars fs-5"></i>
                                         </button>
                                     </div>
