@@ -20,8 +20,12 @@ module.exports = function (grunt) {
                 separator: "\n",
                 banner: "/* Processed by Grunt on " + datetime + " */\n",
             },
-            css: {
-                src: ["src/css/**/*.css"],
+            auth_css: {
+                src: ["src/css/auth/**/*.css"],
+                dest: "dist/auth.css",
+            },
+            user_css: {
+                src: ["src/css/user/**/*.css"],
                 dest: "dist/app.css",
             },
             js_core: {
@@ -45,7 +49,12 @@ module.exports = function (grunt) {
                 roundingPrecision: -1,
                 sourceMap: true,
             },
-            css: {
+            auth_css: {
+                files: {
+                    "../public/css/auth.min.css": ["dist/auth.css"],
+                },
+            },
+            user_css: {
                 files: {
                     "../public/css/app.min.css": ["dist/app.css"],
                 },
@@ -139,9 +148,16 @@ module.exports = function (grunt) {
             },
         },
         watch: {
-            css: {
-                files: ["src/css/**/*.css"],
-                tasks: ["concat:css", "cssmin:css"],
+            auth_css: {
+                files: ["src/css/auth/**/*.css"],
+                tasks: ["concat:css", "cssmin:auth_css"],
+                options: {
+                    spawn: false,
+                },
+            },
+            user_css: {
+                files: ["src/css/user/**/*.css"],
+                tasks: ["concat:css", "cssmin:user_css"],
                 options: {
                     spawn: false,
                 },

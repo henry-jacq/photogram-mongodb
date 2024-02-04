@@ -7,8 +7,10 @@
 # It will concat and minify the CSS files
 function run_css()
 {
-    grunt concat:css
-    grunt cssmin:css
+    grunt concat:auth_css
+    grunt concat:user_css
+    grunt cssmin:auth_css
+    grunt cssmin:user_css
 }
 
 # It will concat and minify the SCSS files
