@@ -2,7 +2,7 @@
     <div class="h-100 d-flex align-items-center justify-content-center row min-vh-100">
         <div class="py-3 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
             <form class="forgot-password-form" method="post" autocomplete="off">
-                <div class="form-control p-4 shadow-lg bg-opacity-25">
+                <div class="form-control p-4 bg-body shadow-lg bg-opacity-25">
                     <div class="d-flex align-items-center justify-content-center mb-3">
                         <i class="bi bi-key-fill fs-1"></i>
                     </div>

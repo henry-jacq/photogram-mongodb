@@ -38,7 +38,8 @@ class AuthController extends Controller
     public function loginView(Request $request, Response $response): Response
     {
         $args = [
-            'title' => 'Login'
+            'title' => 'Login',
+            'auth_css' => true
         ];
         return $this->render($response, 'auth/login', $args, false, false);
     }
@@ -46,7 +47,8 @@ class AuthController extends Controller
     public function registerView(Request $request, Response $response): Response
     {
         $args = [
-            'title' => 'Register'
+            'title' => 'Register',
+            'auth_css' => true
         ];
         return $this->render($response, 'auth/register', $args, false, false);
     }
@@ -55,7 +57,7 @@ class AuthController extends Controller
     {
         $args = [
             'title' => 'Forgot password',
-            'name' => 'Henry'
+            'auth_css' => true
         ];
         return $this->render($response, 'auth/reset_password', $args, false, false);
     }
