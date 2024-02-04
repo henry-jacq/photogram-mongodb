@@ -18,6 +18,7 @@ class ApiController
     protected $params;
     protected $resource;
     protected $namespace;
+    protected $attributes;
     private $current_call;
     protected $slimRequest;
     protected $slimResponse;
@@ -50,10 +51,11 @@ class ApiController
      */
     public function process(Request $request, Response $response): Response
     {
-        $this->files = $request->getUploadedFiles();
         $this->slimRequest = $request;
         $this->slimResponse = $response;
+        $this->files = $request->getUploadedFiles();
         $this->params = $request->getServerParams();
+        $this->attributes = $request->getAttributes();
 
         $get = $this->cleanInputs($request->getQueryParams());
         $post = $this->cleanInputs($request->getParsedBody() ?? []);
@@ -239,11 +241,31 @@ class ApiController
     }
 
     /**
+     * Get request attribute
+     */
+    public function getAttribute(string $attribute)
+    {
+        if (array_key_exists($attribute, $this->attributes)) {
+            return $this->attributes[$attribute];
+        }
+        return false;
+    }
+
+    /**
      * Check if user authenticated or not
      */
     public function isAuthenticated(): bool
     {
         return $this->auth->isAuthenticated();
+    }
+
+    /**
+     * Check if user is admin or not
+     */
+    public function isAdmin(): bool
+    {
+        $role = $this->getAttribute('role');
+        return $role === 'admin';
     }
 
     /**
