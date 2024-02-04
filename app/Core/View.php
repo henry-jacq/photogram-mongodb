@@ -32,6 +32,11 @@ class View implements ViewInterface
         foreach ($params as $key => $value) {
             $$key = $value;
         }
+
+        // Inserting global variables
+        foreach ($this->globals as $key => $value) {
+            $$key = $value;
+        }
         
         if (!str_contains($layoutName, '.php')) {
             $layoutName = $layoutName . '.php';

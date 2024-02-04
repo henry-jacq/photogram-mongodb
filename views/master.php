@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
-<?php echo ($this->renderLayout('head')); ?>
+<?php echo ($this->renderLayout('head', $params)); ?>
 
 <body>
 
@@ -13,9 +13,9 @@
 
     {{footer}}
 
-    <?php echo ($this->renderComponent('scroll')); ?>
-    <?php echo ($this->renderComponent('modal')); ?>
-    <?php echo ($this->renderLayout('script')); ?>
+    <?php echo ($this->renderComponent('scroll', $params)); ?>
+    <?php echo ($this->renderComponent('modal', $params)); ?>
+    <?php echo ($this->renderLayout('script', $params)); ?>
 </body>
 
 </html>
