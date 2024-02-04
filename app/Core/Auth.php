@@ -31,6 +31,10 @@ class Auth implements AuthInterface
         $email = $this->user->validateEmail($credentials['email']);
         $username = $this->user->validateUsername($credentials['username']);
 
+        if ($username === 'admin') {
+            return false;
+        }
+        
         if ($email === false) {
             return false;
         }
