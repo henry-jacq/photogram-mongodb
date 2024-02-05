@@ -1,9 +1,15 @@
 <div class="px-md-5 mt-3">
     <div class="profile-page-cover bg-body-secondary position-relative rounded">
         <div class="position-absolute top-0 end-0 p-3">
-            <a class="small text-secondary me-2" href="https://example.com" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Website"><i class="bi bi-globe fs-5"></i></a>
-            <a class="small me-2 text-danger" href="https://instagram.com/" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instagram"><i class="bi bi-instagram text-danger fs-5"></i></a>
-            <a class="small text-primary" href="https://twitter.com/" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Twitter"><i class="bi bi-twitter text-primary fs-5"></i></a>
+            <?php if (!empty($profileUser['website'])) : ?>
+                <a class="small text-secondary me-2" href="<?= $profileUser['website'] ?>" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Website"><i class="bi bi-globe fs-5"></i></a>
+            <?php endif;
+            if (!empty($profileUser['instagram'])) : ?>
+                <a class="small me-2 text-danger" href="https://instagram.com/<?= $profileUser['instagram'] ?>" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Instagram"><i class="bi bi-instagram text-danger fs-5"></i></a>
+            <?php endif;
+            if (!empty($profileUser['twitter'])) : ?>
+                <a class="small text-primary" href="https://twitter.com/<?= $profileUser['twitter'] ?>" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Twitter"><i class="bi bi-twitter text-primary fs-5"></i></a>
+            <?php endif; ?>
         </div>
         <div class="profile-page-avatar bg-body-secondary">
             <img class="img-fluid rounded-circle" src="https://api.dicebear.com/6.x/shapes/svg?seed=1" alt="">
@@ -20,11 +26,18 @@
     <div class="container mt-5">
         <div class="row ms-2 me-1 mb-2">
             <div class="col-md-7">
-                <h5 class="m-0"><?= ucfirst($profileUser['fullname']) ?> </h5>
-                <p class="mb-2">@<?= $profileUser['username'] ?> <span class="small mb-2"> • App Developer</span></p>
-                <p class="text-secondary small"><i class="bi bi-geo-alt me-1"></i>Chennai, India</p>
-                <p>#!/bin/bash<br>
-                    Full stack developer</p>
+                <h5 class="m-0"><?= ucfirst($profileUser['fullname']) ?>
+                </h5>
+                <p class="mb-2">@<?= $profileUser['username'] ?>
+                    <?php if (!empty($profileUser['job']) && $profileUser['job'] != 'None') :
+                        echo ('<span class="small mb-2"> • ' . $profileUser['job'] . '</span>');
+                    endif; ?></p>
+                <?php if (!empty($profileUser['location'])) : ?>
+                    <p class="text-secondary small"><i class="bi bi-geo-alt me-1"></i><?= $profileUser['location'] ?></p>
+                <?php endif;
+                if (!empty($profileUser['bio'])) : ?>
+                    <p><?= nl2br($profileUser['bio']) ?></p>
+                <?php endif; ?>
             </div>
             <div class="col-md-5 mb-2 px-1">
                 <div class="hstack gap-3 gap-xl-3 float-md-end">

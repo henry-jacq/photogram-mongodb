@@ -13,23 +13,35 @@ class User extends Model
         parent::__construct($mongoDB, $this->collectionName);
     }
 
-    // Update user
-    // TODO: Test this code
+    /**
+     * Update user data
+     */
     public function updateUser($userId, $userData)
     {
-        $this->update($userId, $userData);
+        $data = [
+            'fullname' => $userData['fname'],
+            'website' => $userData['website'],
+            'job' => $userData['job'],
+            'bio' => $userData['bio'],
+            'location' => $userData['location'],
+            'twitter' => $userData['twitter'],
+            'instagram' => $userData['instagram']
+        ];
+        return $this->update($userId, $data);
     }
 
-    public function updatePreferences($id, string $arrayKey, array $newKeyValue)
+    /**
+     * Search users
+     */
+    public function searchUser(string $searchTerm)
     {
         $data = [
-            '$push' => [
-                $arrayKey => [
-                    '$each' => [$newKeyValue]
-                ]
+            '$or' => [
+                ['fullname' => $searchTerm],
+                ['username' => $searchTerm]
             ]
         ];
-        return $this->update($id, $data);
+        return iterator_to_array($this->findAll($data));
     }
 
     /**

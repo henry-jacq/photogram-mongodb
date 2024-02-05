@@ -17,7 +17,10 @@
                                     <?= $p['created_at'] ?></span>
                             </div>
                         </div>
+                        <?php
+                        if (!empty($p['userData']['job']) && $p['userData']['job'] !== 'None'): ?>
                         <p class="mb-0 small fw-light">App Developer</p>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="dropdown">

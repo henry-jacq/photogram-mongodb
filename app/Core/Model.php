@@ -68,9 +68,9 @@ class Model
     }
 
     // Read operation
-    public function findAll()
+    public function findAll($data = [])
     {
-        return $this->collection->find();
+        return $this->collection->find($data);
     }
     
     // Update operation
