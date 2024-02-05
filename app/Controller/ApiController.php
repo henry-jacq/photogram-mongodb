@@ -78,7 +78,14 @@ class ApiController
     protected function fileExists()
     {
         $apiPath = self::API_ROUTE . DIRECTORY_SEPARATOR;
-        $filePath = $this->namespace . DIRECTORY_SEPARATOR . $this->resource . '.php';
+        $filePath = implode(DIRECTORY_SEPARATOR, [$this->namespace, $this->resource]) . '.php';
+
+        $params = $this->handleParams();
+
+        if ($params !== false) {
+            $filePath = implode(DIRECTORY_SEPARATOR, [$this->namespace, $this->resource, $params]) . '.php';
+        }
+
         $fullPath = $apiPath . $filePath;
         if (file_exists($fullPath)) {
             return $fullPath;
@@ -87,11 +94,29 @@ class ApiController
     }
 
     /**
+     * Return the optional route path
+     */
+    public function handleParams()
+    {
+        $params = $this->getAttribute('params');
+        if ($params !== false) {
+            $params = explode('/', $params);
+            $params = implode(DIRECTORY_SEPARATOR, $params);
+        }
+        return $params;
+    }
+
+    /**
      * Handle API
      */
     protected function handle()
     {
         $func = $this->resource;
+        $params = $this->handleParams();
+        if ($params !== false) {
+            // $func = implode(DIRECTORY_SEPARATOR, [$this->resource, $params]);
+            $func = basename($params);
+        }
         if ($this->fileExists() !== false) {
             include_once $this->fileExists();
             $this->current_call = Closure::bind(${$func}, $this, get_class());
@@ -245,7 +270,7 @@ class ApiController
      */
     public function getAttribute(string $attribute)
     {
-        if (array_key_exists($attribute, $this->attributes)) {
+        if (array_key_exists($attribute, $this->attributes) && !empty($this->attributes[$attribute])) {
             return $this->attributes[$attribute];
         }
         return false;
