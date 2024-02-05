@@ -69,11 +69,11 @@
                             <ul class="list-unstyled mt-3 mb-4">
                                 <li>Multiple Image Posts</li>
                                 <li>Posts Analytics</li>
-                                <li>Ad-Free Experience</li>
-                                <li>Scheduled Posts</li>
-                                <li>Enhanced Post Editing</li>
+                                <li>Post Collections</li>
                                 <li>Caption Generator</li>
+                                <li>Scheduled Posts</li>
                                 <li>Profile Cover Image</li>
+                                <li>Enhanced Post Editing</li>
                             </ul>
                             <button type="button" class="w-100 btn btn-lg btn-prime">Get started with Pro</button>
                         </div>
@@ -89,11 +89,11 @@
                             <ul class="list-unstyled mt-3 mb-4">
                                 <li>Multiple Image Posts</li>
                                 <li>Posts Analytics</li>
-                                <li>Ad-Free Experience</li>
-                                <li>Scheduled Posts</li>
-                                <li>Enhanced Post Editing</li>
+                                <li>Post Collections</li>
                                 <li>Caption Generator</li>
+                                <li>Scheduled Posts</li>
                                 <li>Profile Cover Image</li>
+                                <li>Enhanced Post Editing</li>
                             </ul>
                             <button type="button" class="w-100 btn btn-lg btn-prime">Get started with Pro</button>
                         </div>
@@ -224,6 +224,19 @@
                         <td>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-lg" viewBox="0 0 16 16">
                                 <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
+                            </svg>
+                        </td>
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="green" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="text-start fw-normal fs-5">Post collection</th>
+                        <td>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                             </svg>
                         </td>
                         <td>
