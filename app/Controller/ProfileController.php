@@ -23,17 +23,19 @@ class ProfileController extends Controller
     {
         $userData = $request->getAttribute('userData');
         $name = strtolower($request->getAttribute('name'));
-        $avatar = $this->user->getUserAvatar($userData);
         $profile = $this->user->exists([
             'username' => $name, 'email' => null
         ]);
+        $userAvatar = $this->user->getUserAvatar($userData);
+        $profileAvatar = $this->user->getUserAvatar($profile);
 
         if ($profile) {
             $args = [
                 'name' => $name,
                 'user' => $userData,
-                'avatar' => $avatar,
+                'avatar' => $userAvatar,
                 'profileUser' => $profile,
+                'profileAvatar' => $profileAvatar,
                 'title' => ucfirst($name) . "'s Profile",
                 'posts' => $this->post->getUserPosts($profile['_id'])
             ];

@@ -12,7 +12,7 @@
             <?php endif; ?>
         </div>
         <div class="profile-page-avatar bg-body-secondary">
-            <img class="img-fluid rounded-circle" src="<?= $avatar ?>" alt="">
+            <img class="img-fluid rounded-circle" src="<?= $profileAvatar ?>" alt="">
         </div>
         <div class="position-absolute bottom-0 end-0 p-2">
             <?php if ($profileUser['username'] == $user['username']) : ?>
@@ -76,7 +76,7 @@
                         $this->renderComponent('card', [
                             'p' => $post,
                             'user' => $user,
-                            'avatar' => $avatar
+                            'avatar' => $profileAvatar
                         ]);
                     endforeach; ?>
                 </div>
