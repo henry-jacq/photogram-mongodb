@@ -21,10 +21,13 @@ class HomeController extends Controller
 
     public function home(Request $request, Response $response): Response
     {
+        $userData = $request->getAttribute('userData');
+
         $args = [
             'title' => 'Home',
-            'user' => $request->getAttribute('userData'),
-            'posts' => $this->post->getAllPosts()
+            'user' => $userData,
+            'posts' => $this->post->getAllPosts(),
+            'avatar' => $this->user->getUserAvatar($userData)
         ];
         return $this->render($response, 'user/home', $args);
     }

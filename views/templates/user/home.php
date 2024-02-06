@@ -18,7 +18,8 @@
                 foreach ($posts as $post) :
                     $this->renderComponent('card', [
                         'p' => $post,
-                        'user' => $user
+                        'user' => $user,
+                        'avatar' => $avatar
                     ]);
                 endforeach; ?>
             </div>
