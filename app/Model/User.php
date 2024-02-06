@@ -40,7 +40,7 @@ class User extends Model
             if (!empty($ud->avatar)) {
                 $this->image->delete($ud->avatar, 'avatars');
             }
-            
+
             $category = 'avatars';
             $this->image->addImage($avatar);
             $path = $this->image->save($avatar, $category, true);
@@ -104,7 +104,7 @@ class User extends Model
     /**
      * Return user avatar URL
      */
-    public function getUserAvatar(object $user)
+    public function getUserAvatar(array|object $user)
     {
         if (empty($user['avatar'])) {
             return $this->profile_url . (string)$user['_id'];

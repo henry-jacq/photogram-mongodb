@@ -74,6 +74,7 @@ return [
     Post::class => function (ContainerInterface $container) {
         return new Post(
             $container->get(MongoDB::class),
+            $container->get(User::class),
             $container->get(ZipArchive::class)
         );
     }

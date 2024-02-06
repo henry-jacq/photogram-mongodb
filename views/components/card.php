@@ -5,7 +5,7 @@
                 <div class="d-flex align-items-center">
                     <div class="avatar avatar-story me-2">
                         <a href="/profile/<?= $p['userData']['username'] ?>" class="d-block link-dark text-decoration-none" aria-expanded="false">
-                        <img class="user-profile-img border rounded-circle" src="<?= $avatar ?>" width="40" height="40" loading="lazy"></a>
+                        <img class="user-profile-img border rounded-circle" src="<?= $p['avatar'] ?>" width="40" height="40" loading="lazy"></a>
                     </div>
                     <div class="skeleton-header">
                         <div class="nav nav-divider">

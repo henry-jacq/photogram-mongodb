@@ -13,7 +13,11 @@ class Post extends Model
     protected $collectionName = 'posts';
     protected $storage_path = STORAGE_PATH . '/posts/';
 
-    public function __construct($mongoDB, private readonly ZipArchive $zip)
+    public function __construct(
+        $mongoDB,
+        private readonly User $user,
+        private readonly ZipArchive $zip
+    )
     {
         parent::__construct($mongoDB, $this->collectionName);
         if (!file_exists($this->storage_path)) {
@@ -43,6 +47,9 @@ class Post extends Model
             $formattedPost = (array)$post;
             $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
+            $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
+            unset($userData[$post->user_id]['avatar
+            ']);
             $formattedPost['userData'] = $userData[$post->user_id] ?? null;
             $formattedPosts[] = $formattedPost;
         }
@@ -69,6 +76,9 @@ class Post extends Model
             $formattedPost = (array)$post;
             $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
+            $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
+            unset($userData[$post->user_id]['avatar
+            ']);
             $formattedPost['userData'] = $userData[$post->user_id] ?? null;
             $formattedPosts[] = $formattedPost;
         }
