@@ -187,7 +187,7 @@ class Post extends Model
             return false;
         }
         
-        $data = ['caption' => $text];
+        $data = ['$set' => ['caption' => $text]];
 
         $this->update($id, $data);
 
