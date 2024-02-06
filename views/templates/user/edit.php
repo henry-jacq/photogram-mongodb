@@ -2,7 +2,7 @@
     <div class="row border rounded-3">
         <div class="col-lg-3 bg-body-tertiary rounded-3 py-5">
             <div class="d-flex flex-column align-items-center text-center mt-3">
-                <img class="rounded-circle border border-2 border-prime" width="150" src="https://api.dicebear.com/6.x/shapes/svg?seed=1">
+                <img class="rounded-circle border border-2 border-prime" width="150" src="<?= $avatar ?>">
                 <span class="fs-5 fw-semibold mt-2"><?= $user['fullname'] ?></span>
                 <span class="small mt-2"><?= $user['email'] ?></span>
             </div>
@@ -18,9 +18,11 @@
                     <p class="small mb-2">You can change your avatar here or remove the current avatar to revert to <a href="https://dicebear.com" class="text-decoration-none" target="_blank">dicebear.com</a></p>
                     <input class="form-control" type="file" id="user-avatar" name="user_image">
                     <div class="text-secondary small mb-2">The maximum file size allowed is 800KB.</div>
-                    <div class="d-flex justify-content-end mb-3">
-                        <button id="btnRemoveAvatar" class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-trash me-1"></i>Remove avatar</button>
-                    </div>
+                    <?php if (!empty($user['avatar'])) : ?>
+                        <div class="d-flex justify-content-end mb-3">
+                            <button id="btnRemoveAvatar" class="btn btn-sm btn-outline-danger" type="button"><i class="bi bi-trash me-1"></i>Remove avatar</button>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="form-group mb-3">
                     <label for="fname" class="form-label fw-semibold">Full Name</label>

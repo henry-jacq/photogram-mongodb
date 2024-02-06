@@ -23,6 +23,7 @@ class ProfileController extends Controller
     {
         $userData = $request->getAttribute('userData');
         $name = strtolower($request->getAttribute('name'));
+        $avatar = $this->user->getUserAvatar($userData);
         $profile = $this->user->exists([
             'username' => $name, 'email' => null
         ]);
@@ -31,6 +32,7 @@ class ProfileController extends Controller
             $args = [
                 'name' => $name,
                 'user' => $userData,
+                'avatar' => $avatar,
                 'profileUser' => $profile,
                 'title' => ucfirst($name) . "'s Profile",
                 'posts' => $this->post->getUserPosts($profile['_id'])
@@ -43,9 +45,13 @@ class ProfileController extends Controller
 
     public function edit(Request $request, Response $response): Response
     {
+        $userData = $request->getAttribute('userData');
+        $avatar = $this->user->getUserAvatar($userData);
+
         $args = [
             'title' => "Edit Profile",
-            'user' => $request->getAttribute('userData')
+            'user' => $userData,
+            'avatar' => $avatar
         ];
         return $this->render($response, 'user/edit', $args);
     }

@@ -12,7 +12,7 @@
             <?php endif; ?>
         </div>
         <div class="profile-page-avatar bg-body-secondary">
-            <img class="img-fluid rounded-circle" src="https://api.dicebear.com/6.x/shapes/svg?seed=1" alt="">
+            <img class="img-fluid rounded-circle" src="<?= $avatar ?>" alt="">
         </div>
         <div class="position-absolute bottom-0 end-0 p-2">
             <?php if ($profileUser['username'] == $user['username']) : ?>

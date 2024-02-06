@@ -3,12 +3,18 @@
 namespace App\Model;
 
 use App\Core\Model;
+use App\Core\MongoDB;
+use Exception;
 
 class User extends Model
 {
     protected $collectionName = 'users';
+    public $profile_url = "https://api.dicebear.com/6.x/shapes/svg?seed=";
     
-    public function __construct($mongoDB)
+    public function __construct(
+        private readonly Image $image, 
+        private MongoDB $mongoDB
+    )
     {
         parent::__construct($mongoDB, $this->collectionName);
     }
@@ -16,7 +22,7 @@ class User extends Model
     /**
      * Update user data
      */
-    public function updateUser($userId, $userData)
+    public function updateUser($userId, $userData, object $avatar)
     {
         $data = [
             'fullname' => $userData['fname'],
@@ -27,6 +33,15 @@ class User extends Model
             'twitter' => $userData['twitter'],
             'instagram' => $userData['instagram']
         ];
+        
+        if ($this->image->checkError($avatar)) {
+            $category = 'avatars';
+            $this->image->addImage($avatar);
+            $path = $this->image->save($avatar, $category, true);
+            $imgName = $this->image->cropAvatar($path);
+            $data['avatar'] = $imgName;
+        }
+        
         return $this->update($userId, $data);
     }
 
@@ -64,6 +79,9 @@ class User extends Model
         return $data['user'] ?? false;
     }
 
+    /**
+     * Return current session user data
+     */
     public function getUser()
     {
         return $this->findById($_SESSION['user']);
@@ -75,7 +93,30 @@ class User extends Model
         return $this->findOne($data);
     }
 
-    // Switch user theme
+    public function getUserAvatar(object $user)
+    {
+        if (empty($user['avatar'])) {
+            return $this->profile_url . (string)$user['_id'];
+        }
+        return '/files/avatars/' . $user['avatar'];
+    }
+
+    /**
+     * Dumps avatar image contents
+     */
+    public function getAvatar(string $image)
+    {
+        $filePath = STORAGE_PATH . DIRECTORY_SEPARATOR . $image;
+        if (file_exists($filePath) && is_file($filePath)) {
+            return file_get_contents($filePath);
+        }
+
+        return false;
+    }
+
+    /**
+     * Switch user theme
+     */
     public function setTheme(array $data)
     {
         $id = $this->createMongoId($data['id']);

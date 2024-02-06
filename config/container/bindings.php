@@ -7,6 +7,7 @@ use App\Model\Post;
 use App\Model\User;
 use MongoDB\Client;
 use App\Core\Config;
+use App\Model\Image;
 use App\Core\MongoDB;
 use App\Core\Request;
 use App\Core\Session;
@@ -49,8 +50,17 @@ return [
         $client = new Client($config['host']);
         return MongoDB::getInstance($client, $config['dbname']);
     },
+    Image::class => function () {
+        if (extension_loaded('gd')) {
+            return new Image();
+        }
+        throw new Exception('GD Extension is not loaded.');
+    },
     User::class => function(ContainerInterface $container) {
-        return new User($container->get(MongoDB::class));
+        return new User(
+            $container->get(Image::class),
+            $container->get(MongoDB::class)
+        );
     },
     Auth::class => function (ContainerInterface $container) {
         return new Auth(

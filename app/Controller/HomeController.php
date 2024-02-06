@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Core\View;
-use App\Core\Controller;
 use App\Model\Post;
+use App\Model\User;
+use App\Core\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -12,7 +13,8 @@ class HomeController extends Controller
 {
     public function __construct(
         private readonly View $view,
-        private readonly Post $post
+        private readonly Post $post,
+        private readonly User $user
     ) {
         parent::__construct($view);
     }
@@ -43,8 +45,15 @@ class HomeController extends Controller
 
         $path = STORAGE_PATH . '/' . $category . '/' . $imageName;
 
-        if ($category == 'posts') {
-            $image = $this->post->getImage($imageName);
+        if (in_array($category, ['posts', 'avatars'])) {
+            if ($category == 'posts') {
+                $image = $this->post->getImage($imageName);
+            }
+            if ($category == 'avatars') {
+                $imgPath = $category . DIRECTORY_SEPARATOR . $imageName;
+                $image = $this->user->getAvatar($imgPath);
+            }
+            
             if (!$image) {
                 return $response->withStatus(404);
             }
