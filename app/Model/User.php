@@ -33,8 +33,14 @@ class User extends Model
             'twitter' => $userData['twitter'],
             'instagram' => $userData['instagram']
         ];
-                
+        
         if ($this->image->checkError($avatar)) {
+            $ud = $this->getUser();
+
+            if (!empty($ud->avatar)) {
+                $this->image->delete($ud->avatar, 'avatars');
+            }
+            
             $category = 'avatars';
             $this->image->addImage($avatar);
             $path = $this->image->save($avatar, $category, true);
