@@ -23,7 +23,7 @@ class User extends Model
      * Update user data
      */
     public function updateUser($userId, $userData, object $avatar)
-    {
+    {        
         $data = [
             'fullname' => $userData['fname'],
             'website' => $userData['website'],
@@ -33,7 +33,7 @@ class User extends Model
             'twitter' => $userData['twitter'],
             'instagram' => $userData['instagram']
         ];
-        
+                
         if ($this->image->checkError($avatar)) {
             $category = 'avatars';
             $this->image->addImage($avatar);
@@ -41,6 +41,8 @@ class User extends Model
             $imgName = $this->image->cropAvatar($path);
             $data['avatar'] = $imgName;
         }
+
+        $data = ['$set' => $data];
         
         return $this->update($userId, $data);
     }
@@ -93,6 +95,9 @@ class User extends Model
         return $this->findOne($data);
     }
 
+    /**
+     * Return user avatar URL
+     */
     public function getUserAvatar(object $user)
     {
         if (empty($user['avatar'])) {
@@ -112,6 +117,19 @@ class User extends Model
         }
 
         return false;
+    }
+
+    /**
+     * Delete avatar image
+     */
+    public function deleteAvatar(string $id)
+    {
+        $ud = $this->findOne([
+            '_id' => $this->createMongoId($id)
+        ]);
+        $this->image->delete($ud->avatar, 'avatars');
+        $data = ['$unset' => ['avatar' => '']];
+        return $this->update($id, $data);
     }
 
     /**

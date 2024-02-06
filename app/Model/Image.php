@@ -68,6 +68,21 @@ class Image
     }
 
     /**
+     * Delete a image from given source
+     */
+    public function delete(string $imageName, string $pathCategory)
+    {
+        $image_path = STORAGE_PATH . DIRECTORY_SEPARATOR . $pathCategory . DIRECTORY_SEPARATOR . $imageName;
+        if (file_exists($image_path)) {
+            if (unlink($image_path)) {
+                return true;
+            } else {
+                throw new Exception('Cannot remove image: ' . $image_path);
+            }
+        }
+    }
+
+    /**
      * Check file image upload error
      */
     public function checkError(object $image)

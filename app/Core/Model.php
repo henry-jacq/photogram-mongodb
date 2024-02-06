@@ -74,11 +74,11 @@ class Model
     }
     
     // Update operation
-    public function update($id, $data, $index = '_id')
+    public function update($id, array $data, $index = '_id')
     {
         return $this->collection->updateOne([
             $index => $this->createMongoId($id)
-        ], ['$set' => $data]);
+        ], $data);
     }
 
     // Delete operation
