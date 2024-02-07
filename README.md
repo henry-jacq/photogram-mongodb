@@ -59,15 +59,11 @@ chmod +x phpunit.phar
 sudo mv phpunit.phar /usr/local/bin/phpunit
 ```
 
-Uncomment the gd extension in php.ini config:
+Uncomment the gd and mongodb extension in php.ini config:
 ```php
 ;extension=gd
-extension=gd
-```
-
-Uncomment the mongodb extension in php.ini config:
-```php
 ;extension=mongodb
+extension=gd
 extension=mongodb
 ```
 
