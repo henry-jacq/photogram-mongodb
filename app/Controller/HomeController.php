@@ -34,9 +34,12 @@ class HomeController extends Controller
 
     public function discover(Request $request, Response $response): Response
     {
+        $userData = $request->getAttribute('userData');
+
         $args = [
             'title' => 'Discover',
-            'user' => $request->getAttribute('userData')
+            'user' => $userData,
+            'avatar' => $this->user->getUserAvatar($userData),
         ];
         return $this->render($response, 'user/discover', $args);
     }
