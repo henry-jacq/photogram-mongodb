@@ -9,7 +9,7 @@ ${basename(__FILE__, '.php')} = function () {
 
             foreach($result as $user) {
                 $user['id'] = (string)$user['_id'];
-                unset($user['_id']);
+                $user['avatar'] = $this->user->getUserAvatar($user);
                 unset($user['email']);
                 unset($user['password']);
                 unset($user['preferences']);
@@ -18,6 +18,7 @@ ${basename(__FILE__, '.php')} = function () {
                 unset($user['website']);
                 unset($user['twitter']);
                 unset($user['instagram']);
+                unset($user['_id']);
             }
             
             if (count($result) == 1) {
