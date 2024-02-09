@@ -72,13 +72,16 @@
             if ($posts !== false && count($posts) > 0) { ?>
                 <div class="row g-3" id="masonry-area">
                     <?php
-                    foreach ($posts as $post) :
+                    foreach ($posts as $post) : ?>
+                    <div class="col-xxl-3 col-lg-4 col-md-6" id="post-<?= $post['_id'] ?>">
+                    <?php
                         $this->renderComponent('card', [
                             'p' => $post,
                             'user' => $user,
                             'avatar' => $profileAvatar
-                        ]);
-                    endforeach; ?>
+                        ]);?>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
             <?php } else if ($title !== 'Home') { ?>
                 <div class="text-center py-5">

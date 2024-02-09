@@ -13,16 +13,19 @@
         </div>
         <hr class="m-0 py-2">
         <?php if ($posts !== false && count($posts) > 0) : ?>
-            <div class="row g-3" id="masonry-area">
-                <?php
-                foreach ($posts as $post) :
-                    $this->renderComponent('card', [
-                        'p' => $post,
-                        'user' => $user,
-                        'avatar' => $avatar
-                    ]);
-                endforeach; ?>
-            </div>
+                <div class="row g-3" id="masonry-area">
+                    <?php
+                    foreach ($posts as $post) : ?>
+                    <div class="col-xxl-3 col-lg-4 col-md-6" id="post-<?= $post['_id'] ?>">
+                    <?php
+                        $this->renderComponent('card', [
+                            'p' => $post,
+                            'user' => $user,
+                            'avatar' => $avatar
+                        ]);?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
         <?php else : ?>
             <div class="text-center py-5">
                 <i class="bi bi-plus-circle display-4 mb-4"></i>
