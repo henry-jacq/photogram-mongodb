@@ -45,6 +45,22 @@ if ($('#scroll-top-btn').length != 0) {
     });
 }
 
+// Toggle view mode
+$("[name=view_mode]").on('click', function() {
+    const val = $(this).val();
+    
+    $.get("/api/users/preferences",
+    {
+        view: val
+    }, function(data, status) {
+        if (status === 'success') {
+            if (data.message === true) {
+                location.reload()
+            }
+        }
+    });
+});
+
 // Create Post Modal
 $('#postUploadButton').on('click', function () {
     var title = `<i class="bi bi-plus-circle-dotted me-2"></i>Create Post`;
