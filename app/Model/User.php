@@ -139,29 +139,8 @@ class User extends Model
     }
 
     /**
-     * Switch user theme
+     * Validate user email
      */
-    public function setTheme(array $data)
-    {
-        $id = $this->createMongoId($data['id']);
-        $theme = $data['theme'];
-
-        try {
-            $result = $this->collection->updateOne(
-                ['_id' => $id],
-                ['$set' => ['preferences' => [['theme' => $theme]]]]
-            );
-
-            if ($result->getModifiedCount() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
-    }
-
     public function validateEmail(string $email)
     {
         return filterEmail($email);
@@ -178,5 +157,28 @@ class User extends Model
         return strtolower($username);
     }
 
-    // Other model-specific methods
+    /**
+     * Update user preferences
+     */
+    public function updatePreference(string $id, string $preference, $value)
+    {
+        try {
+            $query = ['$set' => [
+                "preferences.$preference" => $value
+            ]];
+
+            $result = $this->update($id, $query);
+
+            if ($result->getModifiedCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        
+        return $result;
+    }
+
 }
