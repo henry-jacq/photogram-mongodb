@@ -26,7 +26,7 @@
     const saveTheme = theme => {
         var xhttp = new XMLHttpRequest()
 
-        xhttp.open('GET', '/api/users/theme?value=' + theme, true);
+        xhttp.open('GET', '/api/users/preferences?theme=' + theme, true);
         xhttp.send()
     }
     

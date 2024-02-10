@@ -2,9 +2,9 @@
 
 ${basename(__FILE__, '.php')} = function () {
     if ($this->isAuthenticated() && $this->isMethod('GET')) {
-        if ($this->paramsExists(['value'])) {
+        if ($this->paramsExists(['theme'])) {
 
-            $theme = $this->data['value'];
+            $theme = $this->data['theme'];
             $data = [
                 'id' => $this->getUserId(),
                 'theme' => $theme
