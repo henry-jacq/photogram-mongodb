@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-$theme = $params['user']['preferences']['theme'];
+$theme = $params['user']['preferences']['theme'] ?? 'dark';
 
 ?>
 
