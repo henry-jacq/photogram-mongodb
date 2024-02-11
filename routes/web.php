@@ -16,6 +16,7 @@ return function (App $app) {
     $app->group('/', function (RouteCollectorProxy $group) {
         $group->get('home', [HomeController::class, 'home']);
         $group->get('discover', [HomeController::class, 'discover']);
+        $group->get('subscribe', [HomeController::class, 'subscribe']);
         $group->get('profile/edit', [ProfileController::class, 'edit']);
         $group->get('profile/{name}', [ProfileController::class, 'profile']);
         $group->get('files/{category}/{image}', [HomeController::class, 'files']);
