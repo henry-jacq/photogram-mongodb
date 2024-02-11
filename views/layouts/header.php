@@ -1,8 +1,8 @@
 <div class="container mt-3 px-md-5">
     <nav class="navbar navbar-expand-md bg-body-tertiary border rounded" aria-label="Photogram Navbar">
         <div class="container-fluid gap-2">
-            <a class="navbar-brand fw-light fs-4 me-auto link-body-emphasis" href="/home">
-                <img src="/assets/brand/photogram-logo.png" width="30" class="d-inline-block align-text-top">
+            <a class="navbar-brand fw-light fs-3 me-auto link-body-emphasis" href="/home">
+                <img src="/assets/brand/photogram-logo.png" width="35" class="d-inline-block align-text-top">
                 <div class="d-none d-md-inline-block">
                     <span>Photogram</span>
                 </div>
@@ -60,7 +60,7 @@
                                     <a class="dropdown-item" href="/settings/account"><i class="bi bi-gear me-2"></i>Settings</a>
                                 </li>
                                 <li class="">
-                                    <a role="button" class="dropdown-item bg-body-tertiary text-warning" onclick="dialog('Not Implemented!',' This feature is not implemented');"><i class="bi bi-star me-2"></i>Upgrade to Pro!</a>
+                                    <a href="/subscribe" role="button" class="dropdown-item bg-body-tertiary text-warning"><i class="bi bi-star me-2"></i>Upgrade to Pro!</a>
                                 </li>
                                 <li class="dropdown-divider"></li>
                                 <li>
