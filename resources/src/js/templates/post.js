@@ -8,12 +8,13 @@ function showToast(title, subtitle, message) {
     tst.showSec(tstSubtitle);
 }
 
+const successAudio = $('<audio>', {
+    id: 'successTone',
+    src: '/assets/sounds/success.mp3'
+});
+
 // Delete post
 $('.btn-delete').on('click', function () {
-    var successAudio = $('<audio>', {
-        id: 'successTone',
-        src: '/assets/sounds/success.mp3'
-    });
     if ($('#successTone').length === 0) {
         $('body').append(successAudio);
     }
@@ -97,10 +98,6 @@ $('.btn-download').on('click', function () {
 
 // Copy the post link
 $('.btn-copy-link').on('click', function () {
-    let successAudio = $('<audio>', {
-        id: 'successTone',
-        src: '/assets/sounds/success.mp3'
-    });
     if ($('#successTone').length === 0) {
         $('body').append(successAudio);
     }
@@ -164,10 +161,6 @@ $('.btn-full-preview').on('click', function () {
 
 // Edit post text
 $('.btn-edit-post').on('click', function () {
-    var successAudio = $('<audio>', {
-        id: 'successTone',
-        src: '/assets/sounds/success.mp3'
-    });
     if ($('#successTone').length === 0) {
         $('body').append(successAudio);
     }
