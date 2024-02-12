@@ -37,49 +37,54 @@ ${basename(__FILE__, '.php')} = function () {
             $comments = $this->post->fetchComments($pid);
 
             $uids = array_column($comments, 'uid');
-
             $usersData = $this->post->getUsersByIds($uids);
 
+            $msg = empty($comments) ? false : true;
 
-            // Populate comments array
             $commentData = [];
             foreach ($comments as $comment) {
                 $userData = $usersData[$comment['uid']];
-                $commentData[] = [
-                    'comment_id' => $comment['_id'],
-                    'comment' => $comment['text'],
-                    'timestamp' => $this->post->getHumanTime($comment['timestamp']),
-                    'username' => $userData['username'],
-                    'fullname' => $userData['fullname'],
-                    'avatar' => $this->user->getUserAvatar($userData)
+                $commentId = (string) $comment['_id'];
+                $commentText = $comment['text'];
+                $timestamp = $this->post->getHumanTime($comment['timestamp']);
+                $username = $userData['username'];
+                $fullname = $userData['fullname'];
+                $avatar = $this->user->getUserAvatar($userData);
+
+                $commentArray = [
+                    'comment' => $commentText,
+                    'timestamp' => $timestamp,
+                    'username' => $username,
+                    'fullname' => $fullname,
+                    'avatar' => $avatar
                 ];
+
+                if ($user['username'] === $username) {
+                    $commentArray['comment_id'] = $commentId;
+                }
+
+                $commentData[] = $commentArray;
             }
 
-            dd($commentData);
-            
-            
+            if (count($commentData) === 0) {
+                $userComments = array('users' => false);
+            } else {
+                $userComments = array('users' => $commentData);
+            }
             
             $data = [
-                'message' => true,
+                'message' => $msg,
                 'owner' => [
                     'username' => $user['username'],
                     'avatar' => $this->user->getUserAvatar($user)
                 ],
-                'comments' => [
-                    [
-                        'comment_id' => '',
-                        'comment' => '',
-                        'timestamp' => '',
-                        'username' => '',
-                        'fullname' => '',
-                        'avatar' => ''
-                    ]
-                ]
+                'comments' => $userComments
             ];
             
             return $this->response($data, 200);
         }
     }
+    
     return $this->response([
         'message' => 'Bad Request'
     ], 400);
