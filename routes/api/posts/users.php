@@ -28,6 +28,57 @@ ${basename(__FILE__, '.php')} = function () {
             ], 200);
         }
 
+        // To fetch commented users
+        if ($this->paramsExists(['comments'])) {
+            
+            $pid = $this->data['comments'];
+            $user = (array) $this->user->getUser();
+
+            $comments = $this->post->fetchComments($pid);
+
+            $uids = array_column($comments, 'uid');
+
+            $usersData = $this->post->getUsersByIds($uids);
+
+
+            // Populate comments array
+            $commentData = [];
+            foreach ($comments as $comment) {
+                $userData = $usersData[$comment['uid']];
+                $commentData[] = [
+                    'comment_id' => $comment['_id'],
+                    'comment' => $comment['text'],
+                    'timestamp' => $this->post->getHumanTime($comment['timestamp']),
+                    'username' => $userData['username'],
+                    'fullname' => $userData['fullname'],
+                    'avatar' => $this->user->getUserAvatar($userData)
+                ];
+            }
+
+            dd($commentData);
+            
+            
+            
+            $data = [
+                'message' => true,
+                'owner' => [
+                    'username' => $user['username'],
+                    'avatar' => $this->user->getUserAvatar($user)
+                ],
+                'comments' => [
+                    [
+                        'comment_id' => '',
+                        'comment' => '',
+                        'timestamp' => '',
+                        'username' => '',
+                        'fullname' => '',
+                        'avatar' => ''
+                    ]
+                ]
+            ];
+            
+            return $this->response($data, 200);
+        }
     }
     return $this->response([
         'message' => 'Bad Request'

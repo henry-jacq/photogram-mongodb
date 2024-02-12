@@ -45,11 +45,10 @@ class Post extends Model
         $formattedPosts = [];
 
         foreach ($posts as $post) {
-            $time = Carbon::parse($post->created_at);
             $formattedPost = (array)$post;
-            $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
             $formattedPost['liked_users'] = $post->likes;
+            $formattedPost['created_at'] = $this->getHumanTime($post->created_at);
             $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
             unset($userData[$post->user_id]['avatar
             ']);
@@ -75,11 +74,10 @@ class Post extends Model
         $formattedPosts = [];
 
         foreach ($posts as $post) {
-            $time = Carbon::parse($post->created_at);
             $formattedPost = (array)$post;
-            $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
             $formattedPost['liked_users'] = $post->likes;
+            $formattedPost['created_at'] = $this->getHumanTime($post->created_at);
             $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
             unset($userData[$post->user_id]['avatar
             ']);
@@ -88,6 +86,15 @@ class Post extends Model
         }
 
         return $formattedPosts;
+    }
+
+    /**
+     * Get Human readable time format
+     */
+    public function getHumanTime(string $timestamp)
+    {
+        $time = Carbon::parse($timestamp);
+        return $time->diffForHumans();
     }
 
     /**
@@ -321,7 +328,8 @@ class Post extends Model
             'comments' => [
                 '_id' => $this->createMongoId(null),
                 'uid' => $uid,
-                'text' => $text
+                'text' => $text,
+                'timestamp' => now()
             ]
         ]];
         
@@ -332,5 +340,16 @@ class Post extends Model
         }
 
         return false;
+    }
+
+    public function fetchComments(string $pid)
+    {
+        $query = [
+            '_id' => $this->createMongoId($pid)
+        ];
+
+        $post = $this->findOne($query);
+
+        return (array) $post->comments;
     }
 }
