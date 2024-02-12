@@ -16,7 +16,7 @@ $view = $user['preferences']['view'] ?? 'grid';
         </div>
         <hr class="m-0 py-2">
         <?php if ($posts !== false && count($posts) > 0) : 
-            $view = $user['preferences']['view'];
+            $view = $user['preferences']['view'] ?? 'grid';
             if (!empty($view) && $view == 'list') : ?>
                 <div class="row g-3">
                     <div class="col-md-12 col-lg-3">

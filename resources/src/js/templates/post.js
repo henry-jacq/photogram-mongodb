@@ -139,11 +139,17 @@ $('.btn-delete').on('click', function () {
                     },
                     success: function (data, textStatus) {
                         if (textStatus === "success") {
-                            var sl = document.querySelector(`#post-${post_id}`);
-                            masonry.remove(sl);
-                            masonry.layout();
-                            successAudio[0].play();
-                            showToast("Photogram", "Just Now", "Your post was successfully deleted!");
+                            if ($('#masonry-area').length !== 0) {
+                                var sl = document.querySelector(`#post-${post_id}`);
+                                masonry.remove(sl);
+                                masonry.layout();
+                                successAudio[0].play();
+                                showToast("Photogram", "Just Now", "Your post was successfully deleted!");
+                            } else {
+                                successAudio[0].play();
+                                showToast("Photogram", "Just Now", "Your post was successfully deleted!");
+                                location.reload();
+                            }
                         } else {
                             showToast("Photogram", "Just Now", "Can't delete your post!");
                         }
