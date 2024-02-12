@@ -47,6 +47,7 @@ class Post extends Model
             $formattedPost = (array)$post;
             $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
+            $formattedPost['liked_users'] = $post->likes;
             $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
             unset($userData[$post->user_id]['avatar
             ']);
@@ -76,6 +77,7 @@ class Post extends Model
             $formattedPost = (array)$post;
             $formattedPost['created_at'] = $time->diffForHumans();
             $formattedPost['likes'] = count($post->likes);
+            $formattedPost['liked_users'] = $post->likes;
             $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
             unset($userData[$post->user_id]['avatar
             ']);
@@ -265,5 +267,46 @@ class Post extends Model
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    }
+
+    /**
+     * Toggle post likes
+     */
+    public function toggleLikes(string $pid, string $uid)
+    {
+        $post = $this->findById($pid);
+        if (in_array($uid, (array)$post['likes'])) {
+            $query = [
+                '$pull' => ['likes' => $uid]
+            ];
+        } else {
+            $query = [
+                '$push' => ['likes' => $uid]
+            ];
+        }
+        $result = $this->update($pid, $query);
+        
+        if ($result->getModifiedCount() > 0) {
+            return true;
+        }
+
+        return false;
+        
+    }
+
+    /**
+     * Get liked users data
+     */
+    public function getLikedUsers(string $pid)
+    {
+        $cursor = $this->findById($pid, multiple: true);
+
+        $posts = iterator_to_array($cursor);
+        $userIds = array_column($posts, 'likes');
+
+        $userIds = (array)$userIds[0];
+        $userData = $this->getUsersByIds($userIds);
+
+        return $userData;
     }
 }

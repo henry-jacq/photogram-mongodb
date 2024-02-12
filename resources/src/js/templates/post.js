@@ -8,6 +8,104 @@ function showToast(title, subtitle, message) {
     tst.showSec(tstSubtitle);
 }
 
+// Change like button status
+function likeBtn(mainSelector) {
+    var likeAudio = $('<audio>', {
+        id: 'likePop',
+        src: '/assets/sounds/like-pop.mp3'
+    });
+    if ($('#likePop').length === 0) {
+        $('body').append(likeAudio);
+    }
+    var likeBtnID = mainSelector.find('a').attr('id');
+    var likeIconSelector = $('#' + likeBtnID).find('i');
+    var placeholder = mainSelector.parent().next().find('.like-count');
+    var currentLikes = parseInt(placeholder.text());
+    if (likeIconSelector.hasClass('fa-regular fa-heart')) {
+        likeAudio[0].play()
+        likeIconSelector.removeClass('fa-regular fa-heart');
+        likeIconSelector.addClass('fa-solid fa-heart text-danger');
+        placeholder.text(currentLikes += 1);
+    }
+    else {
+        if (likeIconSelector.hasClass('fa-solid fa-heart text-danger') && currentLikes != 0) {
+            likeIconSelector.removeClass('fa-solid fa-heart text-danger');
+            likeIconSelector.addClass('fa-regular fa-heart');
+            placeholder.text(currentLikes - + 1);
+        } else {
+            console.error('Cannot dislike the button');
+        }
+    }
+}
+
+// Toggle like button
+function likePost(selector, post_id) {
+    if (selector !== undefined && post_id !== undefined) {
+        // Toggle like or dislike
+        likeBtn(selector);
+        $.post('/api/posts/like',
+        {
+            id: post_id
+        }).fail(function () {
+            likeBtn(selector);
+            console.error("Can't like the post ID: " + post_id);
+        });
+    }
+}
+
+// It will like the post when the user clicks on the like button
+$('.btn-like').on('click', function () {
+    let thisBtn = $(this);
+    let post_id = $(this).attr('data-id');
+    likePost(thisBtn, post_id);
+});
+
+// It will like the post if the image is double clicked
+$(".post-card-image, .carousel").on('dblclick', function () {
+    let thisBtn = $(this).next().find('.btn-group').find('.btn-like');
+    let post_id = $(this).attr('data-id');
+    likePost(thisBtn, post_id);
+});
+
+// Shows list of users who liked post in modal
+$('.likedby-users').on('click', function () {
+    let html = `<div class="container"><ul id="liked-users-list" class="list-group list-group-flush"></ul></div>`;
+    let clone = `<li class="list-group-item"><div class="d-flex align-items-center justify-content-between"><div class="me-2"><div class="d-flex align-items-center"><div class="me-2"><img id="user-avatar" class="border rounded-circle" src="" width="40" height="40" loading="lazy"></div><div class="text-break"><h7 id="fullname" class="text-body"></h7><p id="username" class="mb-0 small fw-light"></p></div></div></div><div><a id="link" href="" class="btn btn-primary btn-sm">Show profile</a></div></div></li>`;
+    const d = new Dialog('Likes', html);
+    d.show('', true);
+    const post_id = $(this).attr('data-id');
+    const modal = d.clone;
+    const target = modal.find('#liked-users-list')
+    modal.find('.modal-body').addClass('p-2');
+    modal.find('.modal-dialog').addClass('modal-dialog-scrollable');
+    modal.find('.modal-footer').remove();
+
+    $.post('/api/posts/users',
+        {
+            likes: post_id
+        }, function (data) {
+            if (data.message == true && data.users != null) {
+                for (let count = 0; count < data.users.length; count++) {
+                    let ud = data.users[count];
+                    let username = ud.username;
+                    let fullname = ud.fullname;
+                    let avatar = ud.avatar;
+                    target.append(clone);
+                    target.find('#username').text('@' + username);
+                    target.find('#username').attr('id', 'username' + count);
+                    target.find('#fullname').text(fullname);
+                    target.find('#fullname').attr('id', 'fullname' + count);
+                    target.find('#user-avatar').attr('src', avatar);
+                    target.find('#user-avatar').attr('id', 'user-avatar' + count);
+                    target.find('#link').attr('href', '/profile/' + username);
+                    target.find('#link').attr('id', 'link' + count);
+                }
+            } else {
+                $('<h5 class="text-center my-5"><i class="bi bi-exclamation-triangle me-2"></i>No liked users found</h5>').prependTo(modal.find('.modal-body').empty())
+            }
+        });
+});
+
 const successAudio = $('<audio>', {
     id: 'successTone',
     src: '/assets/sounds/success.mp3'

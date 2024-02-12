@@ -4,7 +4,7 @@
             <div class="d-flex align-items-center">
                 <div class="avatar avatar-story me-2">
                     <a href="/profile/<?= $p['userData']['username'] ?>" class="d-block link-dark text-decoration-none" aria-expanded="false">
-                    <img class="user-profile-img border rounded-circle" src="<?= $p['avatar'] ?>" width="40" height="40" loading="lazy"></a>
+                        <img class="user-profile-img border rounded-circle" src="<?= $p['avatar'] ?>" width="40" height="40" loading="lazy"></a>
                 </div>
                 <div class="skeleton-header">
                     <div class="nav nav-divider">
@@ -17,8 +17,8 @@
                         </div>
                     </div>
                     <?php
-                    if (!empty($p['userData']['job']) && $p['userData']['job'] !== 'None'): ?>
-                    <p class="mb-0 small fw-light">App Developer</p>
+                    if (!empty($p['userData']['job']) && $p['userData']['job'] !== 'None') : ?>
+                        <p class="mb-0 small fw-light">App Developer</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -34,8 +34,8 @@
                         </a>
                     </li>
                     <li data-id="<?= $p['_id'] ?>">
-                        <a class="dropdown-item btn-copy-link" role="button" 
-                        <?php if (count($p['images']) == 1): echo("value='/files/posts/{$p['images'][0]}'");  endif; ?> >
+                        <a class="dropdown-item btn-copy-link" role="button" <?php if (count($p['images']) == 1) : echo ("value='/files/posts/{$p['images'][0]}'");
+                                                                                endif; ?>>
                             <i class="fa-solid fa-paperclip" aria-hidden="true"></i>
                             <span class="ms-2">Copy Link</span>
                         </a>
@@ -108,7 +108,15 @@
     <div class="card-body px-3 py-2">
         <div class="btn-group fs-5 user-select-none w-100 gap-3 mb-1">
             <div class="btn-like" data-id="<?= $p['_id'] ?>">
-                <a id="like-<?= $p['_id'] ?>" role="button"><i class="btn fs-5 mb-1 p-0 border-0 fa-regular fa-heart" aria-hidden="true"></i></a>
+                <!-- btn fs-5 mb-1 p-0 border-0 fa-solid fa-heart text-danger -->
+                <a id="like-<?= $p['_id'] ?>" role="button">
+                    <?php
+                    if (in_array($user['_id'], (array)$p['liked_users'])) : ?>
+                        <i class="btn fs-5 mb-1 p-0 border-0 fa-solid fa-heart text-danger" aria-hidden="true"></i>
+                        <?php else : ?>
+                            <i class="btn fs-5 mb-1 p-0 border-0 fa-regular fa-heart" aria-hidden="true"></i>
+                    <?php endif; ?>
+                </a>
             </div>
             <div class="btn-comment" data-id="<?= $p['_id'] ?>">
                 <a role="button"><i class="fa-regular fa-comment" aria-hidden="true"></i></a>
