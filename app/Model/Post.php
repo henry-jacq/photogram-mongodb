@@ -7,6 +7,8 @@ use Exception;
 use ZipArchive;
 use Carbon\Carbon;
 use App\Core\Model;
+use MongoDB\BSON\ObjectId;
+
 
 class Post extends Model
 {
@@ -308,5 +310,27 @@ class Post extends Model
         $userData = $this->getUsersByIds($userIds);
 
         return $userData;
+    }
+
+    /**
+     * Add comments to post
+     */
+    public function addComment(string $pid, string $uid, string $text)
+    {
+        $query = ['$push' => [
+            'comments' => [
+                '_id' => $this->createMongoId(null),
+                'uid' => $uid,
+                'text' => $text
+            ]
+        ]];
+        
+        $result = $this->update($pid, $query);
+
+        if ($result->getModifiedCount() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

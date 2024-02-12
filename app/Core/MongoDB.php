@@ -97,7 +97,7 @@ class MongoDB
         return $this->collection;
     }
 
-    public function createMongoId(string $id)
+    public function createMongoId(?string $id)
     {
         return new ObjectId($id);
     }

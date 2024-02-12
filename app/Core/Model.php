@@ -33,7 +33,7 @@ class Model
         }
     }
 
-    public function createMongoId(string $id)
+    public function createMongoId(?string $id)
     {
         return $this->db->createMongoId($id);
     }
