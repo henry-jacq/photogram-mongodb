@@ -80,7 +80,7 @@ $('.btn-comment').on('click', function () {
         let commentText = $(modal_footer.find('#add-comment')).val();
         var messageAudio = $('<audio>', {
             id: 'messageTone',
-            src: '/assets/message-tone.mp3'
+            src: '/assets/sounds/message-tone.mp3'
         });
         if ($('#messageTone').length === 0) {
             $('body').append(messageAudio);

@@ -336,7 +336,7 @@ class Post extends Model
         $result = $this->update($pid, $query);
 
         if ($result->getModifiedCount() > 0) {
-            return true;
+            return (string)$query['$push']['comments']['_id'];
         }
 
         return false;
