@@ -121,7 +121,7 @@ $('.btn-comment').on('click', function () {
         e.stopPropagation();
         var successAudio = $('<audio>', {
             id: 'successTone',
-            src: '/assets/success.mp3'
+            src: '/assets/sounds/success.mp3'
         });
         if ($('#successTone').length === 0) {
             $('body').append(successAudio);
