@@ -53,7 +53,8 @@ $('.btn-comment').on('click', function () {
                         if (sess_user_name == username) {
                             $(deleteBtn).insertAfter(target.find('#commenter-text'));
                             let btnDeleteComment = $(target.find('#commenter-text')).next();
-                            btnDeleteComment.attr('data-id', comment_id);
+                            btnDeleteComment.attr('data-cid', comment_id);
+                            btnDeleteComment.attr('data-pid', post_id);
                         }
                         target.find('#commenter-text').attr('id', Math.random() * 1000 + count);
                     }
@@ -106,7 +107,8 @@ $('.btn-comment').on('click', function () {
                     target.find('#commenter-text').empty().text(commentText);
                     $(deleteBtn).insertAfter(target.find('#commenter-text'));
                     let btnDeleteComment = $(target.find('#commenter-text')).next();
-                    btnDeleteComment.attr('data-id', data.comment_id)
+                    btnDeleteComment.attr('data-cid', data.comment_id)
+                    btnDeleteComment.attr('data-pid', post_id)
                     target.find('#commenter-text').attr('id', Math.random() * 1000);
                     $('.btn-comment-send').attr('disabled', true);
                 }
@@ -124,12 +126,14 @@ $('.btn-comment').on('click', function () {
         if ($('#successTone').length === 0) {
             $('body').append(successAudio);
         }
-        let cid = $(this).attr('data-id');
+        let cid = $(this).attr('data-cid');
+        let pid = $(this).attr('data-pid');
         let comment_box = $(this).parents('.list-group-item');
 
         $.post('/api/posts/comments/delete',
             {
-                comment_id: cid
+                comment_id: cid,
+                post_id: pid
             }, function (data) {
                 if (data.message == true) {
                     successAudio[0].play();

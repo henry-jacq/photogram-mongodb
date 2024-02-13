@@ -342,6 +342,9 @@ class Post extends Model
         return false;
     }
 
+    /**
+     * Fetch comments for given post ID
+     */
     public function fetchComments(string $pid)
     {
         $query = [
@@ -351,5 +354,28 @@ class Post extends Model
         $post = $this->findOne($query);
 
         return (array) $post->comments;
+    }
+
+    /**
+     * Delete a comment
+     */
+    public function deleteComment(string $pid, string $cid)
+    {
+        $data = [
+            '$pull' => [
+                'comments' => [
+                    '_id' => $this->createMongoId($cid)
+                ]
+            ]
+        ];
+
+        $result = $this->update($pid, $data);
+
+        if ($result->getModifiedCount() > 0) {
+            return true;
+        }
+
+        return false;
+        
     }
 }
