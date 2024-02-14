@@ -47,7 +47,7 @@
                     </div>
                     <div class="vr"></div>
                     <div class="text-center px-2">
-                        <h6 class="mb-0">0</h6>
+                        <h6 class="mb-0"><?= $profileLikes ?></h6>
                         <small>Likes</small>
                     </div>
                     <div class="vr"></div>

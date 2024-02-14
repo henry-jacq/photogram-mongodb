@@ -320,6 +320,35 @@ class Post extends Model
     }
 
     /**
+     * Get total likes of a user
+     */
+    public function getUserLikesCount(string $user_id)
+    {
+        $pipeline = [
+            ['$match' => ['user_id' => $user_id]],
+            ['$project' => ['likes' => 1]],
+            ['$unwind' => '$likes'],
+            ['$group' => [
+                '_id' => '$user_id',
+                'totalLikes' => ['$sum' => 1]
+            ]]
+        ];
+        
+        $cursor = $this->collection->aggregate($pipeline);
+        $result = [];
+
+        foreach ($cursor as $doc) {
+            $result[] = $doc;
+        }
+
+        if (empty($result)) {
+            return count($result);
+        }
+
+        return $result[0]['totalLikes'];
+    }
+
+    /**
      * Add comments to post
      */
     public function addComment(string $pid, string $uid, string $text)

@@ -29,12 +29,15 @@ class ProfileController extends Controller
         $userAvatar = $this->user->getUserAvatar($userData);
         $profileAvatar = $this->user->getUserAvatar($profile);
 
+        $likes = $this->post->getUserLikesCount($profile['_id']);
+
         if ($profile) {
             $args = [
                 'name' => $name,
                 'user' => $userData,
                 'avatar' => $userAvatar,
                 'profileUser' => $profile,
+                'profileLikes' => $likes,
                 'profileAvatar' => $profileAvatar,
                 'title' => ucfirst($name) . "'s Profile",
                 'posts' => $this->post->getUserPosts($profile['_id'])
