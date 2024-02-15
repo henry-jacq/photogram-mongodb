@@ -1,18 +1,20 @@
-// Init Masonry
-var grid = document.querySelector('#masonry-area');
-if (grid) {
-    // Initialize masonry
-    var masonry = new Masonry(grid, {
+$(document).on('ready', function () {
+    var $grid = $('#masonry-area');
+
+    // Initialize Masonry
+    $grid.masonry({
+        itemSelector: '.grid-item',
         percentPosition: true
     });
+
     // Layout Masonry after each image loads
-    imagesLoaded(grid).on('progress', function () {
-        masonry.layout();
+    $grid.imagesLoaded().progress(function () {
+        $grid.masonry('layout');
     });
-}
+});
 
 $('.carousel-control-prev, .carousel-control-next').on('click', function () {
-    masonry.layout();
+    $grid.masonry('layout');
 });
 
 // Disable right-click on Images
