@@ -124,7 +124,7 @@ sudo touch /etc/apache2/sites-available/photogram.conf
 
 - Photogram HTTPS Vhost Config
 ```apache
-<VirtualHost *:80>
+<VirtualHost *:443>
     ServerAdmin webmaster@localhost
     DocumentRoot /home/user/htdocs/photogram/public
     ServerName photogram.local
