@@ -63,7 +63,12 @@ class Post extends Model
     {
         $cursor = $this->findAll();
 
-        $posts = iterator_to_array($cursor);
+        $posts = [];
+
+        foreach($cursor as $post) {
+            $posts[] = $post;
+        }
+        
         usort($posts, function ($a, $b) {
             return strtotime($b->created_at) - strtotime($a->created_at);
         });
