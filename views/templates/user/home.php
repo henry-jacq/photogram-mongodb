@@ -60,8 +60,8 @@ $view = $user['preferences']['view'] ?? 'grid';
                             <div class="card-body">
                                 <h5 class="card-title">Photogram Pro 🚀</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">Unleash creativity!</h6>
-                                <p class="card-text">Unlocking pro will allow you to do advanced post manipulation and gives some customization options.</p>
-                                <a href="#" class="card-link">Upgrade to Pro</a>
+                                <p class="card-text">Unlocking pro will allow you to do advanced post manipulation and gives more customization options.</p>
+                                <a href="/subscribe" class="card-link">Upgrade to Pro</a>
                             </div>
                         </div>
                     </div>

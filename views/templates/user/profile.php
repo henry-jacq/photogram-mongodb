@@ -41,22 +41,22 @@
             </div>
             <div class="col-md-5 mb-2 px-1">
                 <div class="hstack gap-3 gap-xl-3 float-md-end">
-                    <div class="text-center px-2">
+                    <div class="text-center text-body-emphasis px-2">
                         <h6 class="mb-0"><?= count($posts); ?></h6>
                         <small>Posts</small>
                     </div>
                     <div class="vr"></div>
-                    <div class="text-center px-2">
+                    <div class="text-center text-body-emphasis px-2">
                         <h6 class="mb-0"><?= $profileLikes ?></h6>
                         <small>Likes</small>
                     </div>
                     <div class="vr"></div>
-                    <div class="text-center">
+                    <div class="text-center btn-get-followers link-body-emphasis" role="button">
                         <h6 class="mb-0">0</h6>
                         <small>Followers</small>
                     </div>
                     <div class="vr"></div>
-                    <div class="text-center">
+                    <div class="text-center btn-get-followings link-body-emphasis" role="button">
                         <h6 class="mb-0">0</h6>
                         <small>Following</small>
                     </div>
@@ -73,14 +73,14 @@
                 <div class="row g-3" id="masonry-area">
                     <?php
                     foreach ($posts as $post) : ?>
-                    <div class="col-xxl-3 col-lg-4 col-md-6" id="post-<?= $post['_id'] ?>">
-                    <?php
-                        $this->renderComponent('card', [
-                            'p' => $post,
-                            'user' => $user,
-                            'avatar' => $profileAvatar
-                        ]);?>
-                    </div>
+                        <div class="col-xxl-3 col-lg-4 col-md-6" id="post-<?= $post['_id'] ?>">
+                            <?php
+                            $this->renderComponent('card', [
+                                'p' => $post,
+                                'user' => $user,
+                                'avatar' => $profileAvatar
+                            ]); ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
             <?php } else if ($title !== 'Home') { ?>
