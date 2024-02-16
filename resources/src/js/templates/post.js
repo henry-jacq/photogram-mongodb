@@ -141,7 +141,7 @@ $('.btn-delete').on('click', function () {
                         if (textStatus === "success") {
                             if ($('#masonry-area').length !== 0) {
                                 var sl = $('#post-' + post_id);
-                                sl.masonry('destroy');
+                                $grid.masonry('remove', sl);
                                 $grid.masonry('layout');
                                 successAudio[0].play();
                                 showToast("Photogram", "Just Now", "Your post was successfully deleted!");
@@ -306,7 +306,7 @@ $('.btn-edit-post').on('click', function () {
                             successAudio[0].play();
                             el.find('.post-text').css('white-space', 'pre-line');
                             el.find('.post-text').html(ptxt.replace(/<br\s*\/?>/ig, '<br>'));
-                            $grid.masonry('layout');
+                            $grid.masonry('layout');;
                             showToast("Photogram", "Just Now", "Post text changed successfully!");
                         } else {
                             showToast("Photogram", "Just Now", "Can't change the post text!");

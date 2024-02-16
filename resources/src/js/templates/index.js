@@ -1,17 +1,15 @@
-$(document).on('ready', function () {
-    var $grid = $('#masonry-area');
-
-    // Initialize Masonry
-    $grid.masonry({
-        itemSelector: '.grid-item',
+// Init masonry
+var grid = document.querySelector('#masonry-area');
+if (grid) {
+    // Initialize masonry
+    var $grid = $('#masonry-area').masonry({
         percentPosition: true
     });
-
     // Layout Masonry after each image loads
     $grid.imagesLoaded().progress(function () {
         $grid.masonry('layout');
     });
-});
+}
 
 $('.carousel-control-prev, .carousel-control-next').on('click', function () {
     $grid.masonry('layout');
