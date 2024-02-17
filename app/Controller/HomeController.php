@@ -26,7 +26,7 @@ class HomeController extends Controller
         $args = [
             'title' => 'Home',
             'user' => $userData,
-            'posts' => $this->post->getAllPosts(),
+            'posts' => $this->post->getLatestPosts(),
             'avatar' => $this->user->getUserAvatar($userData)
         ];
         return $this->render($response, 'user/home', $args);

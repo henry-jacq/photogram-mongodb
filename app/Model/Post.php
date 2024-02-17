@@ -59,19 +59,45 @@ class Post extends Model
         return $formattedPosts;
     }
 
-    public function getAllPosts()
+    public function getLatestPosts(int $limit = 10)
     {
-        $cursor = $this->findAll();
-
-        $posts = [];
-
-        foreach($cursor as $post) {
-            $posts[] = $post;
-        }
+        $posts = $this->findAll()->toArray();
         
         usort($posts, function ($a, $b) {
             return strtotime($b->created_at) - strtotime($a->created_at);
         });
+
+        $posts = array_slice($posts, 0, $limit);
+
+        $userIds = array_column($posts, 'user_id');
+        $userData = $this->getUsersByIds($userIds);
+
+        $formattedPosts = [];
+
+        foreach ($posts as $post) {
+            $formattedPost = (array)$post;
+            $formattedPost['likes'] = count($post->likes);
+            $formattedPost['liked_users'] = $post->likes;
+            $formattedPost['created_at'] = $this->getHumanTime($post->created_at);
+            $formattedPost['avatar'] = $this->user->getUserAvatar($userData[$post->user_id]);
+            unset($userData[$post->user_id]['avatar
+            ']);
+            $formattedPost['userData'] = $userData[$post->user_id] ?? null;
+            $formattedPosts[] = $formattedPost;
+        }
+
+        return $formattedPosts;
+    }
+
+    public function fetchPosts($limit, $skip)
+    {
+        $posts = $this->collection->find()->toArray();
+
+        usort($posts, function ($a, $b) {
+            return strtotime($b->created_at) - strtotime($a->created_at);
+        });
+
+        $posts = array_slice($posts, $skip, $limit);
 
         $userIds = array_column($posts, 'user_id');
         $userData = $this->getUsersByIds($userIds);

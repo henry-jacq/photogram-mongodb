@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Closure;
 use App\Core\Auth;
+use App\Core\View;
 use App\Model\Post;
 use App\Model\User;
 use App\Core\Session;
@@ -39,8 +40,9 @@ class ApiController
 
     public function __construct(
         private readonly Auth $auth,
-        private readonly User $user,
         private readonly Post $post,
+        private readonly User $user,
+        private readonly View $view,
         private readonly Session $session
     )
     {
@@ -185,6 +187,8 @@ class ApiController
     private function packData(array $data, string $contentType)
     {
         switch ($contentType) {
+            case 'text/html':
+                return $data['html'];
             case 'application/json':
                 return packJson($data);
             case 'application/zip':
@@ -195,10 +199,6 @@ class ApiController
                 } else {
                     return packJson(['error' => 'File not found'], 'application/json');
                 }
-            case 'text/html':
-                // Add HTML handling logic here
-                break;
-                // Add more cases for additional content types
             default:
                 return packJson($data);
         }
