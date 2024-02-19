@@ -1,12 +1,47 @@
 // Init masonry
-var grid = document.querySelector('#masonry-area');
+var grid = document.getElementById('masonry-area');
 if (grid) {
-    // Initialize masonry
     var $grid = $('#masonry-area').masonry({
+        itemSelector: '.grid-item',
+        columnWidth: '.grid-item',
         percentPosition: true
     });
-    // Layout Masonry after each image loads
+
     $grid.imagesLoaded().progress(function () {
+        $grid.masonry('layout');
+    });
+
+    $grid.infiniteScroll({
+        path: function () {
+            return '/api/posts/fetch?page=' + this.pageIndex;
+        },
+        append: '.grid-item',
+        outlayer: $grid.data('masonry'),
+        responseType: function (response) {
+            if (response.includes('<html') || response.includes('<HTML')) {
+                return 'text';
+            } else {
+                var jsonResponse = JSON.parse(response);
+                if (jsonResponse.message === 'Not Found') {
+                    $grid.infiniteScroll('option', {
+                        loadOnScroll: false,
+                        status: '.infinite-scroll-status'
+                    });
+                    return 'text';
+                }
+            }
+            return 'json';
+        },
+        status: '.infinite-scroll-status'
+    });
+
+    $grid.on('load.infiniteScroll', function (event, response) {
+        var bodyContent = $(response).find('body').html();
+        var $items = $(bodyContent);
+        $grid.append($items).masonry('appended', $items);
+        $grid.imagesLoaded().progress(function () {
+            $grid.masonry('layout');
+        });
         $grid.masonry('layout');
     });
 }
