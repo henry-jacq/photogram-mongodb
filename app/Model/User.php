@@ -2,21 +2,27 @@
 
 namespace App\Model;
 
-use App\Core\Model;
-use App\Core\MongoDB;
 use Exception;
+use App\Core\Database;
 
-class User extends Model
+class User
 {
-    protected $collectionName = 'users';
+    public $id;
+    private $conn;
+    protected $length = 32;
+    protected $table = 'users';
     public $profile_url = "https://api.dicebear.com/6.x/shapes/svg?seed=";
     
     public function __construct(
-        private readonly Image $image, 
-        private MongoDB $mongoDB
+        private readonly Image $image,
+        private readonly Database $db,
     )
     {
-        parent::__construct($mongoDB, $this->collectionName);
+        $this->db->setTable($this->table);
+
+        if (!$this->conn) {
+            $this->conn = $this->db->getDB();
+        }
     }
 
     /**
@@ -70,21 +76,44 @@ class User extends Model
     /**
      * Check by username or email
      */
-    public function exists(array $data)
+    public function exists($user): array|bool
     {
-        $email = ['email' => $data['email']];
-        $username = ['username' => $data['username']];
-        $data = [];
+        $result = $this->db->select(
+            conditions: [
+                'OR' => [
+                    'username' => $user,
+                    'email' => $user
+                ]
+            ]
+        );
 
-        if ($this->findOne($username) !== null) {
-            $data['user'] = $this->findOne($username);
+        if (count($result) > 1) {
+            throw new Exception('Duplicate User Entry Found!');
         }
 
-        if ($this->findOne($email) !== null) {
-            $data['user'] = $this->findOne($email);
-        }
+        return empty($result) ? false : $result[0];
+    }
 
-        return $data['user'] ?? false;
+    /**
+     * Create new user entry
+     */
+    public function create(array $data)
+    {
+        $username = $this->validateUsername($data['username']);
+        $email = $this->validateEmail($data['email']);
+        $password = password_hash($data['password'], PASSWORD_DEFAULT, ['cost' => 8]);
+        
+        $data = [
+            'username' => $username,
+            'fullname' => ucfirst($data['fullname']),
+            'email'     => $email,
+            'password' => $password,
+            'active' => 0,
+            'signup_time' => now(),
+            'created_at' => now()
+        ];
+
+        return $this->db->insert($data);
     }
 
     /**
@@ -92,13 +121,11 @@ class User extends Model
      */
     public function getUser()
     {
-        return $this->findById($_SESSION['user']);
     }
     
     // Get user details
     public function getUserDetails(array $data)
     {
-        return $this->findOne($data);
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Core\View;
-use App\Model\Post;
 use App\Model\User;
 use App\Core\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -13,7 +12,6 @@ class HomeController extends Controller
 {
     public function __construct(
         private readonly View $view,
-        private readonly Post $post,
         private readonly User $user
     ) {
         parent::__construct($view);
@@ -49,9 +47,7 @@ class HomeController extends Controller
         $userData = $request->getAttribute('userData');
 
         $args = [
-            'title' => 'Photogram Pro',
-            'user' => $userData,
-            'avatar' => $this->user->getUserAvatar($userData)
+            'title' => 'Photogram Pro'
         ];
 
         return $this->render($response, 'user/subscribe', $args);

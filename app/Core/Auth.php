@@ -5,9 +5,8 @@ namespace App\Core;
 use Exception;
 use App\Model\User;
 use App\Core\Session;
-use App\Interfaces\AuthInterface;
 
-class Auth implements AuthInterface
+class Auth
 { 
     public function __construct(
         private readonly User $user,
@@ -21,13 +20,6 @@ class Auth implements AuthInterface
      */
     public function register(array $credentials)
     {
-        // Amount of cost requires to generate a random hash
-        $options = [
-            'cost' => 8
-        ];
-
-        $fullname = ucfirst(trim($credentials['fullname']));
-        $password = password_hash($credentials['password'], PASSWORD_DEFAULT, $options);
         $email = $this->user->validateEmail($credentials['email']);
         $username = $this->user->validateUsername($credentials['username']);
 
@@ -38,41 +30,28 @@ class Auth implements AuthInterface
         if ($email === false) {
             return false;
         }
-        
-        $data = [
-            'fullname' => $fullname,
-            'username' => $username,
-            'email' => $email,
-            'password' => $password,
-            'preferences' => []
-        ];
 
         try {
-            if ($this->user->exists($data)) {
+            if ($this->user->exists($username)) {
                 return false;
             }
             
-            return $this->user->create($data);
+            return $this->user->create($credentials);
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
     }
 
     /**
-     * Login user
+     * Login user with username or email
      */
-    public function login(array $credentials)
+    public function login($user, $password)
     {
-        $data = [
-            'username' => $credentials['user'],
-            'email' => $credentials['user']
-        ];
-        
-        $result = $this->user->exists($data);
+        $result = $this->user->exists($user);
         
         if ($result !== false) {
-            if (password_verify($credentials['password'], $result['password'])) {
-                $this->session->put('user', (string) $result['_id']);
+            if (password_verify($password, $result['password'])) {
+                $this->session->put('user', $result['id']);
                 return true;
             }
         }
