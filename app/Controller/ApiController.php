@@ -5,8 +5,6 @@ namespace App\Controller;
 use Closure;
 use App\Core\Auth;
 use App\Core\View;
-use App\Model\Post;
-use App\Model\User;
 use App\Core\Session;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -40,8 +38,6 @@ class ApiController
 
     public function __construct(
         private readonly Auth $auth,
-        private readonly Post $post,
-        private readonly User $user,
         private readonly View $view,
         private readonly Session $session
     )
@@ -121,7 +117,7 @@ class ApiController
         }
         if ($this->fileExists() !== false) {
             include_once $this->fileExists();
-            $this->current_call = Closure::bind(${$func}, $this, get_class());
+            $this->current_call = Closure::bind(${$func}, $this, __CLASS__);
             return $this->$func();
         } else {
             return $this->response([
@@ -141,7 +137,7 @@ class ApiController
             return false;
         }
         foreach ($params as $param) {
-            if (!array_key_exists($param, $this->data)) {
+            if (!array_key_exists($param, $this->data) || empty($this->data[$param])) {
                 $exists = false;
             }
         }
@@ -177,9 +173,9 @@ class ApiController
     /**
      * Get redirect URL
      */
-    public function getRedirect()
+    public function getRedirect($default = "/")
     {
-        $redirect = $this->session->get('_redirect', '/home');
+        $redirect = $this->session->get('_redirect', $default);
         $this->session->forget('_redirect');
         return $redirect;
     }
@@ -324,3 +320,4 @@ class ApiController
             ->withStatus($statusCode);
     }
 }
+
