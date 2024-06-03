@@ -2,6 +2,7 @@
 
 use Slim\App;
 use App\Core\View;
+use App\Model\Post;
 use App\Model\User;
 use App\Core\Config;
 use App\Model\Image;
@@ -61,7 +62,18 @@ return [
     User::class => function(ContainerInterface $container){
         return new User(
             $container->get(Image::class),
-            $container->get(Database::class)
+            $container->get(Database::class),
+            $container->get(SessionInterface::class),
+        );
+    },
+    ZipArchive::class => function () {
+        return new ZipArchive();
+    },
+    Post::class => function (ContainerInterface $container) {
+        return new Post(
+            $container->get(Image::class),
+            $container->get(Database::class),
+            $container->get(ZipArchive::class)
         );
     },
 ];

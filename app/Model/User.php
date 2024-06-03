@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Exception;
 use App\Core\Database;
+use App\Core\Session;
 
 class User
 {
@@ -16,6 +17,7 @@ class User
     public function __construct(
         private readonly Image $image,
         private readonly Database $db,
+        private readonly Session $session,
     )
     {
         $this->db->setTable($this->table);
@@ -43,8 +45,8 @@ class User
         if ($this->image->checkError($avatar)) {
             $ud = $this->getUser();
 
-            if (!empty($ud->avatar)) {
-                $this->image->delete($ud->avatar, 'avatars');
+            if (!empty($ud['avatar'])) {
+                $this->image->delete($ud['avatar'], 'avatars');
             }
 
             $category = 'avatars';
@@ -64,13 +66,16 @@ class User
      */
     public function searchUser(string $searchTerm)
     {
-        $data = [
-            '$or' => [
-                ['fullname' => $searchTerm],
-                ['username' => $searchTerm]
+        $data = $this->db->select(
+            conditions: [
+                'OR' => [
+                    'fullname' => $searchTerm,
+                    'username' => $searchTerm
+                ]
             ]
-        ];
-        return iterator_to_array($this->findAll($data));
+        );
+
+        return iterator_to_array($data);
     }
 
     /**
@@ -116,11 +121,18 @@ class User
         return $this->db->insert($data);
     }
 
+    public function update(int $userID, array $data)
+    {
+        $result = $this->db->update($data, ['id' => $userID]);
+        return $result;
+    }
+
     /**
      * Return current session user data
      */
     public function getUser()
     {
+        return $this->db->getRowById($this->session->get('user'));
     }
     
     // Get user details
@@ -134,7 +146,7 @@ class User
     public function getUserAvatar(array|object $user)
     {
         if (empty($user['avatar'])) {
-            return $this->profile_url . (string)$user['_id'];
+            return $this->profile_url . $user['id'];
         }
         return '/files/avatars/' . $user['avatar'];
     }
@@ -157,10 +169,8 @@ class User
      */
     public function deleteAvatar(string $id)
     {
-        $ud = $this->findOne([
-            '_id' => $this->createMongoId($id)
-        ]);
-        $this->image->delete($ud->avatar, 'avatars');
+        $ud = $this->getUser();
+        $this->image->delete($ud['avatar'], 'avatars');
         $data = ['$unset' => ['avatar' => '']];
         return $this->update($id, $data);
     }
@@ -196,7 +206,7 @@ class User
 
             $result = $this->update($id, $query);
 
-            if ($result->getModifiedCount() > 0) {
+            if ($result > 0) {
                 return true;
             } else {
                 return false;

@@ -6,20 +6,61 @@ use DateTime;
 use Exception;
 use ZipArchive;
 use Carbon\Carbon;
+use App\Model\Image;
+use App\Core\Database;
 
 
 class Post
 {
-    protected $collectionName = 'posts';
+    protected $table1 = 'posts';
+    protected $table2 = 'post_images';
     protected $storage_path = STORAGE_PATH . '/posts/';
 
     public function __construct(
+        private readonly Image $image,
+        private readonly Database $db,
         private readonly ZipArchive $zip
     )
     {
         if (!file_exists($this->storage_path)) {
             mkdir($this->storage_path);
         }
+
+        // Default table 1
+        $this->db->setTable($this->table1);
+    }
+
+    public function getAllPosts($limit = 10)
+    {
+        // Select post data from the posts table
+        $postData = $this->db->select(limit: $limit);
+
+        // Switch to the post_images table
+        $this->db->setTable($this->table2);
+
+        // Select image data from the post_images table
+        $imageData = $this->db->select();
+
+        // Create an associative array to map post IDs to their images
+        $imagesByPostId = [];
+        foreach ($imageData as $img) {
+            $postId = $img['post_id'];
+            if (!isset($imagesByPostId[$postId])) {
+                $imagesByPostId[$postId] = [];
+            }
+            $imagesByPostId[$postId][] = $img['image_uri'];
+        }
+
+        // Combine post data with their corresponding image data
+        $newData = [];
+        foreach ($postData as $post) {
+            $postId = $post['id'];
+            $images = isset($imagesByPostId[$postId]) ? $imagesByPostId[$postId] : [];
+            $post['images'] = $images;
+            $newData[] = $post;
+        }
+
+        return $newData;
     }
 
     /**
@@ -27,15 +68,34 @@ class Post
      */
     public function getUserPosts(string $user_id)
     {
+        $postData = $this->db->getRowById($user_id, 'uid');
+        
+        $this->db->setTable($this->table2);
+
+        $postData['uploaded_time'] = $this->getHumanTime($postData['uploaded_time']);
+        $postData['images'] = $this->db->select(['image_uri'], ['post_id' => $postData['id']]);
+
+        $this->db->setTable($this->table1);
+
+        return $postData;
     }
 
     public function getLatestPosts(int $limit = 10)
     {
+        return $this->db->select(orderBy: 'uploaded_time DESC', limit: $limit);
     }
 
-    public function fetchPosts($limit, $skip)
-    {
-    }
+    /**
+     * Fetch posts using offset
+     */
+    // public function fetchPosts($limit = 10, $offset)
+    // {
+    //     return $this->db->select(
+    //         limit: $limit,
+    //         offset: $offset,
+    //         orderBy: 'uploaded_time DESC'
+    //     );
+    // }
 
     /**
      * Get Human readable time format
@@ -47,12 +107,17 @@ class Post
     }
 
     /**
-     * Get post by its ID
+     * Get single post by its ID
      */
     public function getPostById(string $pid)
     {
-        // $result = $this->findById($pid);
-        // return $result;
+        $postData = $this->db->getRowById($pid, 'id');
+
+        $this->db->setTable($this->table2);
+
+        $postData['images'] = $this->db->select(['image_uri'], ['post_id' => $postData['id']]);
+
+        return $postData;
     }
 
     /**
@@ -62,8 +127,36 @@ class Post
     {
     }
 
+    /**
+     * Create post
+     */
     public function createPost(array $data)
     {
+        $multiple = (count($data['images']) > 1) ? 1 : 0;
+        
+        $postData = [
+            'uid' => $data['user_id'],
+            'caption' => $data['text'],
+            'multiple' => $multiple,
+            'uploaded_time' => now()
+        ];
+        $this->db->setTable($this->table1);
+        $post_id = $this->db->insert($postData);
+
+        $this->db->setTable($this->table2);
+
+        foreach ($data['images'] as $image_path) {
+            $imageName = $this->storeImage($image_path);
+            $imagesData = [
+                'post_id' => $post_id,
+                'image_uri' => $imageName
+            ];
+            $this->db->insert($imagesData);
+        }     
+
+        $this->db->setTable($this->table1);
+        
+        return true;
     }
 
     public function getPostZip(string $postId)

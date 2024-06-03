@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\View;
+use App\Model\Post;
 use App\Model\User;
 use App\Core\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -12,6 +13,7 @@ class HomeController extends Controller
 {
     public function __construct(
         private readonly View $view,
+        private readonly Post $post,
         private readonly User $user
     ) {
         parent::__construct($view);
@@ -24,7 +26,7 @@ class HomeController extends Controller
         $args = [
             'title' => 'Home',
             'user' => $userData,
-            'posts' => $this->post->getLatestPosts(),
+            'posts' => $this->post->getAllPosts(),
             'avatar' => $this->user->getUserAvatar($userData)
         ];
         return $this->render($response, 'user/home', $args);
